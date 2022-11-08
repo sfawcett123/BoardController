@@ -24,6 +24,7 @@ namespace BoardController
         private readonly Timer _timer;
         private readonly static ManualResetEvent tcpClientConnected = new(false);
         private readonly int baseport = 9000;
+        private string last_str = "";
         #endregion
 
         #region public variables
@@ -38,6 +39,10 @@ namespace BoardController
         public int Timeout { get => timeout; private set => timeout = value; }
         public int Hash { get => GetHashCode(); }
         public Dictionary<string, string>? OutputData { get; internal set; }
+ 
+        // Pulse is set to every 10th iteration,
+        // The pulse is when it sends the data regardless of whether it has changed or not
+        public int Pulse { get; private set; } = 10;
         #endregion
         public BoardDetails()
         {
@@ -106,7 +111,7 @@ namespace BoardController
         {
             timeout++;
 
-           // Console.WriteLine("Processing board [{0}]", timeout );
+            //Console.WriteLine("Processing board [{0}]", timeout );
 
             if (tcpListener is null)
             {
@@ -147,11 +152,14 @@ namespace BoardController
             if (client is null) return;
             if (client.Connected is false) return;
 
+            if ( timeout % Pulse != 0 && _str == last_str) return;
+            
             try
             {
                 NetworkStream stream = client.GetStream();
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(_str);
                 stream.Write(msg, 0, msg.Length);
+                last_str = _str;
                 timeout = 0;
     
             }
