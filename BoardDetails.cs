@@ -176,19 +176,20 @@ namespace BoardController
             client = tcpListener.EndAcceptTcpClient(ar);
 
             timeout = 0;
-            Console.WriteLine("Client Connected on {0} , Port {1}",
-                     System.Net.IPAddress.Parse(((IPEndPoint)tcpListener.LocalEndpoint).Address.ToString()),
-                     ((IPEndPoint)tcpListener.LocalEndpoint).Port.ToString());
+            Console.WriteLine("Listening on {0} , Port {1} for TCP data",
+                                System.Net.IPAddress.Parse(((IPEndPoint)tcpListener.LocalEndpoint).Address.ToString()),
+                                ((IPEndPoint)tcpListener.LocalEndpoint).Port.ToString());
 
-#if false
-                    int i;
-                    while ((i = stream.Read(bytes, 0, bytes.Length)) != 0)
-                    {
-                        // Translate data bytes to a ASCII string.
-                        data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                        Console.WriteLine("Received: {0}", data);
-                    } 
-#endif
+            int i;
+            NetworkStream stream = client.GetStream();
+            byte[] bytes = new byte[client.ReceiveBufferSize];
+            while ((i = stream.Read(bytes, 0, client.ReceiveBufferSize)) != 0)
+            {
+                // Translate data bytes to a ASCII string.
+                string data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                Console.WriteLine("Received: {0}", data);
+            } 
+
 
             tcpClientConnected.Set();
         }
