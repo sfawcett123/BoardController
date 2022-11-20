@@ -100,7 +100,8 @@ namespace BoardController
         {
             Dictionary<string, string> _serial = new() { { "name"      , Name            },
                                                          { "ip_address", IPAddress       },
-                                                         { "port"      , Port.ToString() } };
+                                                         { "port"      , Port.ToString() },
+                                                         { "os"        , "ARDUINO"       }  };
             return _serial;
         }
 
