@@ -41,9 +41,6 @@ namespace BoardController
         public int Timeout { get => timeout; private set => timeout = value; }
         public int Hash { get => GetHashCode(); }
         public Dictionary<string, string>? OutputData { get; internal set; }
- 
-        // Pulse is set to every 10th iteration,
-        // The pulse is when it sends the data regardless of whether it has changed or not
         public int Pulse { get; private set; } = 10;
         #endregion
         public BoardDetails()
@@ -57,16 +54,6 @@ namespace BoardController
             if (tcpListener is null) return "Unknown";
             if (tcpListener.LocalEndpoint is null) return "Unknown";
             return tcpListener.LocalEndpoint.ToString() ;
-        }
-        public bool Timedout()
-        {
-            if (timeout > TIMEOUT)
-            {
-                Console.WriteLine("Board {0}:{1} timed out after {2} ticks", ip_address, port , timeout);
-                return true;
-            }
-
-            return false;
         }
         public bool Equals(BoardDetails? other)
         {
@@ -103,7 +90,7 @@ namespace BoardController
             Dictionary<string, string> _serial = new() { { "name"      , Name            },
                                                          { "ip_address", IPAddress       },
                                                          { "port"      , Port.ToString() },
-                                                         { "os"        , os              }  };
+                                                         { "os"        , os              } };
             return _serial;
         }
 
@@ -184,16 +171,16 @@ namespace BoardController
                                 System.Net.IPAddress.Parse(((IPEndPoint)tcpListener.LocalEndpoint).Address.ToString()),
                                 ((IPEndPoint)tcpListener.LocalEndpoint).Port.ToString());
 
-            int i;
-            NetworkStream stream = client.GetStream();
-            byte[] bytes = new byte[client.ReceiveBufferSize];
-            while ((i = stream.Read(bytes, 0, client.ReceiveBufferSize)) != 0)
-            {
+            //int i;
+            //NetworkStream stream = client.GetStream();
+            //byte[] bytes = new byte[client.ReceiveBufferSize];
+            //while ((i = stream.Read(bytes, 0, client.ReceiveBufferSize)) != 0)
+            //{
                 // Translate data bytes to a ASCII string.
-                string data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+                // string data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
                 // TODO: Add code to handle incoming data
                 //Console.WriteLine("Received: {0}", data);
-            } 
+           // } 
 
 
             tcpClientConnected.Set();

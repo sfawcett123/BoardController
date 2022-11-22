@@ -21,7 +21,7 @@ namespace BoardController
                 Name = _board.Name,
                 IPAddress = _ip_address,
                 Rate = 1,
-                OS = _board.Operating_system.ToUpper()
+                OS = _board.OperatingSystem,
             };
 
             if (!_boards.Contains<BoardDetails>(_bd))
@@ -34,7 +34,7 @@ namespace BoardController
         }
         public void RemoveTimedOut()
         {
-            foreach (BoardController.BoardDetails b in _boards.Where(s => s.Timedout() == true).ToArray<BoardDetails>())
+            foreach (BoardController.BoardDetails b in _boards.Where(s => s.Timeout > BoardDetails.TIMEOUT).ToArray<BoardDetails>())
             {
                 _boards.Remove(b);
                 b.Dispose();

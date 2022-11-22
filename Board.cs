@@ -13,6 +13,28 @@ namespace BoardController
         [MaxLength(140)]
         public string Name { get; set; } = "unknown";
         public List<string>? Outputs { get; set; }
-        public string Operating_system { get; set; } = "unknown";
+        public string OperatingSystem { get => operatingSystem;  set => operatingSystem = ValidateOS(value); }
+        public static string ValidateOS(string os)
+        {
+            if (os == null) { return OperatingSystems.UNKNOWN.ToString(); }
+
+            foreach (string name in Enum.GetNames(typeof(OperatingSystems)))
+            {
+                if (os.ToUpper() == name) { return name; }
+            }
+
+            return OperatingSystems.UNKNOWN.ToString();
+        }
+
+        private string operatingSystem = "UNKNOWN";
+    }
+
+    public enum OperatingSystems
+    {
+        UNKNOWN,
+        LINUX,
+        ARDUINO,
+        WINDOWS,
+        RASPBERRY_PI
     }
 }
