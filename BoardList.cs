@@ -20,7 +20,8 @@ namespace BoardController
             {
                 Name = _board.Name,
                 IPAddress = _ip_address,
-                Rate = 1
+                Rate = 1,
+                OS = _board.Os_system.ToUpper()
             };
 
             if (!_boards.Contains<BoardDetails>(_bd))

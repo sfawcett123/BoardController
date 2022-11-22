@@ -15,6 +15,7 @@ namespace BoardController
 
         #region private variables
         private string name = "unknown";
+        private string os = "UNKNOWN";
         private IPAddress? ip_address;
         private int port;
         private TcpClient? client;
@@ -36,6 +37,7 @@ namespace BoardController
                                   set => ip_address = System.Net.IPAddress.Parse(value); }
         public int Port { get => port;  set => port = value; }
         public int Rate { get => rate; set => rate = value; }
+        public string OS { get => os; set => os = value; }  
         public int Timeout { get => timeout; private set => timeout = value; }
         public int Hash { get => GetHashCode(); }
         public Dictionary<string, string>? OutputData { get; internal set; }
@@ -101,7 +103,7 @@ namespace BoardController
             Dictionary<string, string> _serial = new() { { "name"      , Name            },
                                                          { "ip_address", IPAddress       },
                                                          { "port"      , Port.ToString() },
-                                                         { "os"        , "ARDUINO"       }  };
+                                                         { "os"        , os              }  };
             return _serial;
         }
 
@@ -133,6 +135,7 @@ namespace BoardController
         }
         private void DoStart()
         {
+            // TODO: Do not use hard coded IP address
             IPAddress local_ip_address = System.Net.IPAddress.Parse("192.168.1.134");
             tcpListener = GetNextAvailablePort(local_ip_address);
         }
@@ -188,7 +191,8 @@ namespace BoardController
             {
                 // Translate data bytes to a ASCII string.
                 string data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                Console.WriteLine("Received: {0}", data);
+                // TODO: Add code to handle incoming data
+                //Console.WriteLine("Received: {0}", data);
             } 
 
 
