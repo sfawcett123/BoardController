@@ -13,8 +13,6 @@ namespace BoardController
         [MaxLength(140)]
         public string Name { get; set; } = "unknown";
         public List<string>? Outputs { get; set; }
-        public string Os_system { get; set; } = "unknown";
-        public string Os_Version { get; set; } = "unknown";
-        public string Linux_name { get; set; } = "unknown";
+        public string Operating_system { get; set; } = "unknown";
     }
 }
