@@ -7,9 +7,15 @@ using System.Collections.Generic;
 
 namespace BoardController
 {
+    /// <summary>
+    /// Information about a connected board
+    /// </summary>
     public class BoardDetails : IEquatable<BoardDetails?>, IDisposable
     {
         #region constants
+        /// <summary>
+        /// Timeout Period
+        /// </summary>
         public const int TIMEOUT = 100;
         #endregion
 
@@ -29,62 +35,129 @@ namespace BoardController
         #endregion
 
         #region public variables
+        /// <summary>
+        /// Board Name
+        /// </summary>
         public string Name { get => name; set => name = value; }
+        /// <summary>
+        /// IP address of board
+        /// </summary>
         public string IPAddress { get {
                                      if (ip_address == null) return "Unknown";
                                      return ip_address.ToString(); 
                                   }
                                   set => ip_address = System.Net.IPAddress.Parse(value); }
+        /// <summary>
+        /// Port number the board will communicate on
+        /// </summary>
         public int Port { get => port;  set => port = value; }
+        /// <summary>
+        /// Sample Rate
+        /// </summary>
         public int Rate { get => rate; set => rate = value; }
+        /// <summary>
+        /// Operating system of the board
+        /// </summary>
         public string OS { get => os; set => os = value; }  
+        /// <summary>
+        /// Should this be public?
+        /// </summary>
         public int Timeout { get => timeout; private set => timeout = value; }
+        /// <summary>
+        /// Hask of Board
+        /// </summary>
         public int Hash { get => GetHashCode(); }
+        /// <summary>
+        /// List of data from Flight Simulator the board requires.
+        /// </summary>
         public Dictionary<string, string>? OutputData { get; internal set; }
+        /// <summary>
+        /// Tick rate?
+        /// </summary>
         public int Pulse { get; private set; } = 10;
         #endregion
+        /// <summary>
+        /// Constructor
+        /// </summary>
         public BoardDetails()
         {
             DoStart();
             _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(rate));
         }
         #region public methods
+        /// <summary>
+        /// Override the ToString Method
+        /// </summary>
+        /// <returns></returns>
         public override string? ToString()
         {
             if (tcpListener is null) return "Unknown";
             if (tcpListener.LocalEndpoint is null) return "Unknown";
             return tcpListener.LocalEndpoint.ToString() ;
         }
+        /// <summary>
+        /// Comparison method
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
         public bool Equals(BoardDetails? other)
         {
             return other is not null &&
                    port == other.port &&
                    ip_address == other.ip_address;
         }
+        /// <summary>
+        ///  Dispose of board
+        /// </summary>
         public void Dispose()
         {
             _timer?.Dispose();
             GC.SuppressFinalize(this);
         }
+        /// <summary>
+        /// Calculate HASH
+        /// </summary>
+        /// <returns></returns>
         public override int GetHashCode()
         {
             if(tcpListener is null) return HashCode.Combine(ip_address , port );
             return HashCode.Combine(ip_address, tcpListener.LocalEndpoint.ToString() );
         }
+        /// <summary>
+        /// Comparison operator
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
         public static bool operator ==(BoardDetails? left, BoardDetails? right)
         {
             return EqualityComparer<BoardDetails>.Default.Equals(left, right);
         }
+        /// <summary>
+        /// Comaprison operator
+        /// </summary>
+        /// <param name="left"></param>
+        /// <param name="right"></param>
+        /// <returns></returns>
         public static bool operator !=(BoardDetails? left, BoardDetails? right)
         {
             return !(left == right);
         }
+        /// <summary>
+        /// Comaprison method
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
         public override bool Equals(object? obj)
         {
             if (obj is null) return false;
 
             return Equals(obj as BoardDetails);
         }
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         public Dictionary<string, string> ToDictionary()
         {
             Dictionary<string, string> _serial = new() { { "name"      , Name            },
