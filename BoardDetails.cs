@@ -59,23 +59,28 @@ namespace BoardController
         /// Operating system of the board
         /// </summary>
         public string OS { get => os; set => os = value; }  
+        
         /// <summary>
         /// Should this be public?
         /// </summary>
         public int Timeout { get => timeout; private set => timeout = value; }
+        
         /// <summary>
         /// Hask of Board
         /// </summary>
         public int Hash { get => GetHashCode(); }
+        
         /// <summary>
         /// List of data from Flight Simulator the board requires.
         /// </summary>
         public Dictionary<string, string>? OutputData { get; internal set; }
+        
         /// <summary>
         /// Tick rate?
         /// </summary>
         public int Pulse { get; private set; } = 10;
         #endregion
+        
         /// <summary>
         /// Constructor
         /// </summary>

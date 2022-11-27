@@ -67,13 +67,29 @@ namespace BoardController
         /// For each board set the output data
         /// </summary>
         /// <param name="fs_data"></param>
+        // TODO: Output data needs to be specific to each boards requirements
+        // current implemtation has all boards set to all data
         
-        public void OutputData(Dictionary<string, string> fs_data)
+        public void SetOutputData(Dictionary<string, string> fs_data)
         {
             foreach (BoardController.BoardDetails b in boards )
             {
                 b.OutputData = fs_data;
             }
+        }
+
+        /// <summary>Gets all output data.</summary>
+        /// <returns>A dictionary of all outputs from every registered board.</returns>
+        public Dictionary<string, string> GetAllOutputData()
+        {
+            Dictionary<string, string> all_data = new();
+
+            foreach (BoardController.BoardDetails b in boards)
+            {
+                if( b.OutputData is not null ) all_data.MergeLeft(b.OutputData);
+            }
+
+            return all_data;
         }
     }
 }
