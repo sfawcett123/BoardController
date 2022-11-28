@@ -34,6 +34,7 @@ namespace BoardController
                 IPAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
+                OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => "" ) , 
             };
 
             if (!boards.Contains<BoardDetails>(_bd))
@@ -86,7 +87,7 @@ namespace BoardController
 
             foreach (BoardController.BoardDetails b in boards)
             {
-                if( b.OutputData is not null ) all_data.MergeLeft(b.OutputData);
+                if( b.OutputData is not null ) all_data = all_data.MergeLeft(b.OutputData);
             }
 
             return all_data;
