@@ -13,14 +13,6 @@ namespace BoardController
         /// <summary>The boards</summary>
         private readonly List<BoardDetails> boards = new();
 
-        /// <summary>Gets the boards.</summary>
-        /// <returns>
-        ///   <br />
-        /// </returns>
-        public List<BoardDetails> GetBoards()
-        {
-            return boards;
-        }
         /// <summary>
         /// Add another board
         /// </summary>
@@ -107,6 +99,16 @@ namespace BoardController
             }
 
             return all_data;
+        }
+
+        /// <summary>Gets the boards.</summary>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public List<BoardDetails> GetBoards()
+        {
+            Console.WriteLine("Im gettign the boards");
+            return boards;
         }
     }
 }
