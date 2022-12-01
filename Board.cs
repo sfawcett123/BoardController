@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace BoardController
 {
@@ -16,7 +11,7 @@ namespace BoardController
         [Required]
         [MaxLength(140)]
         public string Name { get; set; } = "unknown";
-        
+
         /// <summary>
         /// List of Outputs
         /// </summary>
@@ -27,8 +22,8 @@ namespace BoardController
         /// The Operating System of the attached board.
         /// </summary>
         /// <example>ARDUINO</example>
-        public string OperatingSystem { get => operatingSystem;  set => operatingSystem = ValidateOS(value); }
-        
+        public string OperatingSystem { get => operatingSystem; set => operatingSystem = ValidateOS(value); }
+
         /// <summary>
         /// Validate Operating System
         /// </summary>

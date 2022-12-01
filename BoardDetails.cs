@@ -1,9 +1,6 @@
-﻿using System.Net.NetworkInformation;
+﻿using System.Net;
+using System.Net.NetworkInformation;
 using System.Net.Sockets;
-using System.Net;
-using System.Text.Json;
-using System.ComponentModel.DataAnnotations;
-using System.Collections.Generic;
 
 namespace BoardController
 {
@@ -20,16 +17,11 @@ namespace BoardController
         #endregion
 
         #region private variables
-        private string name = "unknown";
-        private string os = "UNKNOWN";
         private IPAddress? ip_address;
-        private int port;
         private TcpClient? client;
-        private int rate = 1;
-        private int timeout;
         private TcpListener? tcpListener;
         private readonly Timer _timer;
-        private readonly static ManualResetEvent tcpClientConnected = new(false);
+        private static readonly ManualResetEvent tcpClientConnected = new(false);
         private readonly int baseport = 9000;
         private string last_str = "";
         #endregion
@@ -38,56 +30,56 @@ namespace BoardController
         /// <summary>
         /// Board Name
         /// </summary>
-        public string Name { get => name; set => name = value; }
+        public string Name { get; set; } = "unknown";
         /// <summary>
         /// IP address of board
         /// </summary>
-        public string IPAddress { get {
-                                     if (ip_address == null) return "Unknown";
-                                     return ip_address.ToString(); 
-                                  }
-                                  set => ip_address = System.Net.IPAddress.Parse(value); }
+        public string IPAddress
+        {
+            get => ip_address == null ? "Unknown" : ip_address.ToString();
+            set => ip_address = System.Net.IPAddress.Parse(value);
+        }
         /// <summary>
         /// Port number the board will communicate on
         /// </summary>
-        public int Port { get => port;  set => port = value; }
+        public int Port { get; set; }
         /// <summary>
         /// Sample Rate
         /// </summary>
-        public int Rate { get => rate; set => rate = value; }
+        public int Rate { get; set; } = 1;
         /// <summary>
         /// Operating system of the board
         /// </summary>
-        public string OS { get => os; set => os = value; }  
-        
+        public string OS { get; set; } = "UNKNOWN";
+
         /// <summary>
         /// Should this be public?
         /// </summary>
-        public int Timeout { get => timeout; private set => timeout = value; }
-        
+        public int Timeout { get; private set; }
+
         /// <summary>
         /// Hask of Board
         /// </summary>
-        public int Hash { get => GetHashCode(); }
-        
+        public int Hash => GetHashCode();
+
         /// <summary>
         /// List of data from Flight Simulator the board requires.
         /// </summary>
         public Dictionary<string, string>? OutputData { get; internal set; }
-        
+
         /// <summary>
         /// Tick rate?
         /// </summary>
         public int Pulse { get; private set; } = 10;
         #endregion
-        
+
         /// <summary>
         /// Constructor
         /// </summary>
         public BoardDetails()
         {
             DoStart();
-            _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(rate));
+            _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
         }
         #region public methods
         /// <summary>
@@ -96,9 +88,7 @@ namespace BoardController
         /// <returns></returns>
         public override string? ToString()
         {
-            if (tcpListener is null) return "Unknown";
-            if (tcpListener.LocalEndpoint is null) return "Unknown";
-            return tcpListener.LocalEndpoint.ToString() ;
+            return tcpListener is null ? "Unknown" : tcpListener.LocalEndpoint is null ? "Unknown" : tcpListener.LocalEndpoint.ToString();
         }
         /// <summary>
         /// Comparison method
@@ -108,7 +98,7 @@ namespace BoardController
         public bool Equals(BoardDetails? other)
         {
             return other is not null &&
-                   port == other.port &&
+                   Port == other.Port &&
                    ip_address == other.ip_address;
         }
         /// <summary>
@@ -125,8 +115,9 @@ namespace BoardController
         /// <returns></returns>
         public override int GetHashCode()
         {
-            if(tcpListener is null) return HashCode.Combine(ip_address , port );
-            return HashCode.Combine(ip_address, tcpListener.LocalEndpoint.ToString() );
+            return tcpListener is null
+                ? HashCode.Combine(ip_address, Port)
+                : HashCode.Combine(ip_address, tcpListener.LocalEndpoint.ToString());
         }
         /// <summary>
         /// Comparison operator
@@ -155,9 +146,7 @@ namespace BoardController
         /// <returns></returns>
         public override bool Equals(object? obj)
         {
-            if (obj is null) return false;
-
-            return Equals(obj as BoardDetails);
+            return obj is not null && Equals(obj as BoardDetails);
         }
         /// <summary>
         /// 
@@ -168,7 +157,7 @@ namespace BoardController
             Dictionary<string, string> _serial = new() { { "name"      , Name            },
                                                          { "ip_address", IPAddress       },
                                                          { "port"      , Port.ToString() },
-                                                         { "os"        , os              } };
+                                                         { "os"        , OS              } };
             return _serial;
         }
 
@@ -177,7 +166,7 @@ namespace BoardController
         #region private methods
         private void ProcessBoard(object? state)
         {
-            timeout++;
+            Timeout++;
 
             //Console.WriteLine("Processing board [{0}]", timeout );
 
@@ -190,7 +179,10 @@ namespace BoardController
             {
                 if (!tcpListener.Pending())
                 {
-                    if ( OutputData is not null ) WriteLine( OutputData.Serialize() );
+                    if (OutputData is not null)
+                    {
+                        WriteLine(OutputData.Serialize());
+                    }
                 }
                 else
                 {
@@ -206,45 +198,58 @@ namespace BoardController
         }
         private void DoBeginAcceptTcpClient()
         {
-            tcpClientConnected.Reset();
+            _ = tcpClientConnected.Reset();
 
             if (tcpListener is not null)
-            { 
-                Console.WriteLine("Waiting for a connection from {0}:{1}", ip_address, port);
+            {
+                Console.WriteLine("Waiting for a connection from {0}:{1}", ip_address, Port);
 
-                tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), tcpListener);
+                _ = tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), tcpListener);
             }
-            tcpClientConnected.WaitOne();
+            _ = tcpClientConnected.WaitOne();
         }
         private void WriteLine(string _str)
         {
-            if (client is null) return;
-            if (client.Connected is false) return;
+            if (client is null)
+            {
+                return;
+            }
 
-            if ( timeout % Pulse != 0 && _str == last_str) return;
-            
+            if (client.Connected is false)
+            {
+                return;
+            }
+
+            if (Timeout % Pulse != 0 && _str == last_str)
+            {
+                return;
+            }
+
             try
             {
                 NetworkStream stream = client.GetStream();
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(_str);
                 stream.Write(msg, 0, msg.Length);
                 last_str = _str;
-                timeout = 0;
-    
+                Timeout = 0;
+
             }
             catch
             {
-                    Console.WriteLine("Connection on {0}:{1} Lost", ip_address, port);
-                    client.Close();
+                Console.WriteLine("Connection on {0}:{1} Lost", ip_address, Port);
+                client.Close();
             }
         }
         private void DoAcceptTcpClientCallback(IAsyncResult ar)
         {
-            if (tcpListener is null) return;
+            if (tcpListener is null)
+            {
+                return;
+            }
 
             client = tcpListener.EndAcceptTcpClient(ar);
 
-            timeout = 0;
+            Timeout = 0;
             Console.WriteLine("Listening on {0} , Port {1} for TCP data",
                                 System.Net.IPAddress.Parse(((IPEndPoint)tcpListener.LocalEndpoint).Address.ToString()),
                                 ((IPEndPoint)tcpListener.LocalEndpoint).Port.ToString());
@@ -254,14 +259,14 @@ namespace BoardController
             //byte[] bytes = new byte[client.ReceiveBufferSize];
             //while ((i = stream.Read(bytes, 0, client.ReceiveBufferSize)) != 0)
             //{
-                // Translate data bytes to a ASCII string.
-                // string data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-                // TODO: Add code to handle incoming data
-                //Console.WriteLine("Received: {0}", data);
-           // } 
+            // Translate data bytes to a ASCII string.
+            // string data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
+            // TODO: Add code to handle incoming data
+            //Console.WriteLine("Received: {0}", data);
+            // } 
 
 
-            tcpClientConnected.Set();
+            _ = tcpClientConnected.Set();
         }
         #endregion
 
@@ -286,19 +291,19 @@ namespace BoardController
                     }
                 }
 
-                if (isAvailable) 
-                {            
+                if (isAvailable)
+                {
                     try
                     {
                         TcpListener _local = new(local_ip_address, _port);
                         _local.Start();
                         Console.WriteLine("Starting board on {0} port {1}", local_ip_address, _port);
-                        port = _port;
+                        Port = _port;
                         return _local;
                     }
                     catch
                     {
-                        continue ;
+                        continue;
                     }
                 }
             }

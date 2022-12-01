@@ -4,13 +4,13 @@ using System.Text.Json;
 
 namespace BoardController
 {
- /// <summary>
- /// List of Boards
- /// </summary>
-    public abstract class BoardList 
+    /// <summary>
+    /// List of Boards
+    /// </summary>
+    public abstract class BoardList
     {
         /// <summary>The boards</summary>
-        public readonly List<BoardDetails> boards = new() ;
+        public readonly List<BoardDetails> boards = new();
 
         /// <summary>
         /// Add another board
@@ -23,8 +23,12 @@ namespace BoardController
             string _ip_address = "localhost";
 
             if (_request is not null)
+            {
                 if (_request.RemoteIpAddress is not null)
+                {
                     _ip_address = _request.RemoteIpAddress.ToString();
+                }
+            }
 
             Console.WriteLine("Request from " + _ip_address + " Name = " + _board.Name);
 
@@ -34,7 +38,7 @@ namespace BoardController
                 IPAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
-                OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => "" ) , 
+                OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => ""),
             };
 
             if (!boards.Contains<BoardDetails>(_bd))
@@ -52,7 +56,7 @@ namespace BoardController
         {
             foreach (BoardController.BoardDetails b in boards.Where(s => s.Timeout > BoardDetails.TIMEOUT).ToArray<BoardDetails>())
             {
-                boards.Remove(b);
+                _ = boards.Remove(b);
                 b.Dispose();
             }
         }
@@ -62,7 +66,7 @@ namespace BoardController
         /// <returns></returns>
         public string Serialize()
         {
-            return JsonSerializer.Serialize(this.boards);
+            return JsonSerializer.Serialize(boards);
         }
         /// <summary>
         /// For each board set the output data
@@ -70,10 +74,10 @@ namespace BoardController
         /// <param name="fs_data"></param>
         // TODO: Output data needs to be specific to each boards requirements
         // current implemtation has all boards set to all data
-        
+
         public void SetOutputData(Dictionary<string, string> fs_data)
         {
-            foreach (BoardController.BoardDetails b in boards )
+            foreach (BoardController.BoardDetails b in boards)
             {
                 b.OutputData = fs_data;
             }
@@ -87,7 +91,10 @@ namespace BoardController
 
             foreach (BoardController.BoardDetails b in boards)
             {
-                if( b.OutputData is not null ) all_data = all_data.MergeLeft(b.OutputData);
+                if (b.OutputData is not null)
+                {
+                    all_data = all_data.MergeLeft(b.OutputData);
+                }
             }
 
             return all_data;
