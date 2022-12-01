@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Http;
+using System.Collections.Immutable;
 using System.Text.Json;
 
 
@@ -10,8 +11,16 @@ namespace BoardController
     public abstract class BoardList
     {
         /// <summary>The boards</summary>
-        public readonly List<BoardDetails> boards = new();
+        private readonly List<BoardDetails> boards = new();
 
+        /// <summary>Gets the boards.</summary>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public List<BoardDetails> GetBoards()
+        {
+            return boards;
+        }
         /// <summary>
         /// Add another board
         /// </summary>
