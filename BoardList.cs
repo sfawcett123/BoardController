@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.Text.Json;
 
 
-namespace BoardController
+namespace BoardManager
 {
     /// <summary>
     /// List of Boards
@@ -55,7 +55,7 @@ namespace BoardController
         /// </summary>
         public void RemoveTimedOut()
         {
-            foreach (BoardController.BoardDetails b in boards.Where(s => s.Timeout > BoardDetails.TIMEOUT).ToArray<BoardDetails>())
+            foreach (BoardManager.BoardDetails b in boards.Where(s => s.Timeout > BoardDetails.TIMEOUT).ToArray<BoardDetails>())
             {
                 _ = boards.Remove(b);
                 b.Dispose();
@@ -78,7 +78,7 @@ namespace BoardController
 
         public void SetOutputData(Dictionary<string, string> fs_data)
         {
-            foreach (BoardController.BoardDetails b in boards)
+            foreach (BoardManager.BoardDetails b in boards)
             {
                 b.OutputData = fs_data;
             }
@@ -90,7 +90,7 @@ namespace BoardController
         {
             Dictionary<string, string> all_data = new();
 
-            foreach (BoardController.BoardDetails b in boards)
+            foreach (BoardManager.BoardDetails b in boards)
             {
                 if (b.OutputData is not null)
                 {

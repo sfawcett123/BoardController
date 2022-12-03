@@ -2,7 +2,7 @@
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 
-namespace BoardController
+namespace BoardManager
 {
     /// <summary>
     /// Information about a connected board
