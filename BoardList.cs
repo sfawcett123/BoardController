@@ -1,5 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
 using System.Collections.Immutable;
+using System.Net.Sockets;
+using System.Net;
+using System.Runtime.CompilerServices;
 using System.Text.Json;
 
 
@@ -13,15 +16,25 @@ namespace BoardManager
         /// <summary>The boards</summary>
         private readonly List<BoardDetails> boards = new();
 
+
+        /// <summary>Adds the specified board.</summary>
+        /// <param name="_board">The board.</param>
+        /// <returns>
+        ///   <br />
+        /// </returns>
+        public string Add(Board _board)
+        {
+            return Add(_board, null);
+        }
         /// <summary>
         /// Add another board
         /// </summary>
         /// <param name="_board"></param>
         /// <param name="_request"></param>
         /// <returns></returns>
-        public string Add(Board _board, ConnectionInfo _request)
+        public string Add(Board _board, ConnectionInfo? _request)
         {
-            string _ip_address = "localhost";
+            string _ip_address = "127.0.0.1";
 
             if (_request is not null)
             {
@@ -36,7 +49,8 @@ namespace BoardManager
             BoardDetails _bd = new()
             {
                 Name = _board.Name,
-                IPAddress = _ip_address,
+                BoardInternal = _ip_address == "127.0.0.1",
+                IPAddress = _ip_address ,
                 Rate = 1,
                 OS = _board.OperatingSystem,
                 OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => ""),
@@ -57,8 +71,11 @@ namespace BoardManager
         {
             foreach (BoardManager.BoardDetails b in boards.Where(s => s.Timeout > BoardDetails.TIMEOUT).ToArray<BoardDetails>())
             {
-                _ = boards.Remove(b);
-                b.Dispose();
+                if (!b.BoardInternal )
+                {
+                    _ = boards.Remove(b);
+                    b.Dispose();
+                }
             }
         }
         /// <summary>
@@ -107,7 +124,6 @@ namespace BoardManager
         /// </returns>
         public List<BoardDetails> GetBoards()
         {
-            Console.WriteLine("Im gettign the boards");
             return boards;
         }
     }

@@ -71,6 +71,10 @@ namespace BoardManager
         /// Tick rate?
         /// </summary>
         public int Pulse { get; private set; } = 10;
+        /// <summary>Gets a value indicating whether [board internal].</summary>
+        /// <value>
+        ///   <c>true</c> if [board internal]; otherwise, <c>false</c>.</value>
+        public bool BoardInternal { get; internal set; } = false;
         #endregion
 
         /// <summary>
@@ -192,6 +196,8 @@ namespace BoardManager
         }
         private void DoStart()
         {
+            if (BoardInternal is true) return;
+
             // TODO: Do not use hard coded IP address
             IPAddress local_ip_address = System.Net.IPAddress.Parse("192.168.1.134");
             tcpListener = GetNextAvailablePort(local_ip_address);
