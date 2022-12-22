@@ -3,7 +3,7 @@
 namespace BoardManager
 {
     /// <summary> Board Details </summary>
-    public class Board
+    public sealed class Board
     {
         /// <summary>
         /// Name of the board

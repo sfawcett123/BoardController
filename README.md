@@ -11,4 +11,3 @@ The main methods are:
 
 - Add - Adds a board to the list of registered boards.
 - Remove_Timed_out - Removes any boards from the list that have not responded.
-- 
