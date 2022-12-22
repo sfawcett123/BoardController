@@ -10,6 +10,10 @@
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <RepositoryUrl>https://github.com/sfawcett123/BoardController</RepositoryUrl>
     <PackageProjectUrl>https://github.com/sfawcett123/BoardController</PackageProjectUrl>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+    <PackageRequireLicenseAcceptance>True</PackageRequireLicenseAcceptance>
+    <Copyright>Steven Fawcett</Copyright>
+    <Description>TCP/IP handler for board mulitplexing</Description>
   </PropertyGroup>
 
   <ItemGroup>
@@ -17,6 +21,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <None Update="LICENSE">
+      <Pack>True</Pack>
+      <PackagePath>\</PackagePath>
+    </None>
     <None Update="README.md">
       <Pack>True</Pack>
       <PackagePath>\</PackagePath>
