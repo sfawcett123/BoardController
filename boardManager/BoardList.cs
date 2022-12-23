@@ -5,8 +5,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
-
-namespace BoardManager
+namespace BoardManager.boardManager
 {
     /// <summary>
     /// List of Boards
@@ -15,7 +14,6 @@ namespace BoardManager
     {
         /// <summary>The boards</summary>
         private readonly List<BoardDetails> boards = new();
-
 
         /// <summary>Adds the specified board.</summary>
         /// <param name="_board">The board.</param>
@@ -50,12 +48,12 @@ namespace BoardManager
             {
                 Name = _board.Name,
                 BoardInternal = _ip_address == "127.0.0.1",
-                IPAddress = _ip_address ,
+                IPAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
                 OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => ""),
             };
-
+            
             if (!boards.Contains<BoardDetails>(_bd))
             {
                 boards.Add(_bd);
@@ -67,11 +65,12 @@ namespace BoardManager
         /// <summary>
         /// Remove Timed out boards
         /// </summary>
-        public void RemoveTimedOut()
+        public void RemoveTimedOut( int timeout = BoardDetails.TIMEOUT )
         {
-            foreach (BoardManager.BoardDetails b in boards.Where(s => s.Timeout > BoardDetails.TIMEOUT).ToArray<BoardDetails>())
+            foreach (BoardDetails b in boards.Where(s => s.Timeout > timeout).ToArray<BoardDetails>())
             {
-                if (!b.BoardInternal )
+                Console.WriteLine(b.Name + " " + b.Timeout + " > " + timeout );
+                if (!b.BoardInternal)
                 {
                     _ = boards.Remove(b);
                     b.Dispose();
@@ -95,7 +94,7 @@ namespace BoardManager
 
         public void SetOutputData(Dictionary<string, string> fs_data)
         {
-            foreach (BoardManager.BoardDetails b in boards)
+            foreach (BoardDetails b in boards)
             {
                 b.OutputData = fs_data;
             }
@@ -107,9 +106,12 @@ namespace BoardManager
         {
             Dictionary<string, string> all_data = new();
 
-            foreach (BoardManager.BoardDetails b in boards.Where( x => x.OutputData is not null ) )
+            foreach (BoardDetails b in boards.Where(x => x is not null))
             {
+                if (b.OutputData != null)
+                {
                     all_data = all_data.MergeLeft(b.OutputData);
+                }
             }
 
             return all_data;

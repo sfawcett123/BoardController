@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace BoardManager
+namespace BoardManager.boardManager
 {
     internal static class Helper
     {
@@ -24,8 +24,7 @@ namespace BoardManager
         /// <returns>
         ///   <br />
         /// </returns>
-        public static T MergeLeft<T, K, V>(this T me, params IDictionary<K, V>[] others)
-            where T : IDictionary<K, V>, new()
+        public static T MergeLeft<T, K, V>(this T me, params IDictionary<K, V>[] others) where T : IDictionary<K, V>, new()
         {
             T newMap = new();
             foreach (IDictionary<K, V> src in new List<IDictionary<K, V>> { me }.Concat(others))

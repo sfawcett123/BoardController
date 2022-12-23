@@ -1,4 +1,4 @@
-﻿using BoardManager;
+﻿using BoardManager.boardManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BoardManagerTests
@@ -11,10 +11,10 @@ namespace BoardManagerTests
         [TestMethod]
         public void TestBoard()
         {
-            BoardManager.Board brd = new()
+            Board brd = new()
             {
                 Name = "Test",
-                OperatingSystem = BoardManager.OperatingSystems.ARDUINO.ToString(),
+                OperatingSystem = OperatingSystems.ARDUINO.ToString(),
                 Outputs = new() { "PLANE ALTITUDE" },
             };
 
@@ -26,7 +26,7 @@ namespace BoardManagerTests
         [TestMethod]
         public void TestValidateGood()
         {
-            string result = BoardManager.Board.ValidateOS("ARDUINO");
+            string result = Board.ValidateOS("ARDUINO");
             Assert.AreEqual(result, OperatingSystems.ARDUINO.ToString() );
         }
 
@@ -34,7 +34,7 @@ namespace BoardManagerTests
         [TestMethod]
         public void TestValidateNull()
         {
-            string result = BoardManager.Board.ValidateOS("");
+            string result = Board.ValidateOS("");
             Assert.AreEqual(result, OperatingSystems.UNKNOWN.ToString());
         }
 
@@ -42,7 +42,7 @@ namespace BoardManagerTests
         [TestMethod]
         public void TestValidateBad()
         {
-            string result = BoardManager.Board.ValidateOS("CHEESE");
+            string result = Board.ValidateOS("CHEESE");
             Assert.AreEqual(result, OperatingSystems.UNKNOWN.ToString());
         }
 

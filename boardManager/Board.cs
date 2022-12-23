@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace BoardManager
+namespace BoardManager.boardManager
 {
     /// <summary> Board Details </summary>
     public sealed class Board
