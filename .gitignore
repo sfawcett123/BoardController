@@ -31,6 +31,7 @@
 *.out
 *.app
 
+TestResults
 .vs/
 bin/
 obj/
