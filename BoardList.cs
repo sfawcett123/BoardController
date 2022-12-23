@@ -107,9 +107,12 @@ namespace BoardManager
         {
             Dictionary<string, string> all_data = new();
 
-            foreach (BoardManager.BoardDetails b in boards.Where( x => x.OutputData is not null ) )
+            foreach (BoardManager.BoardDetails b in boards.Where( x => x is not null ) )
             {
+                if (b.OutputData != null)
+                {
                     all_data = all_data.MergeLeft(b.OutputData);
+                }
             }
 
             return all_data;
