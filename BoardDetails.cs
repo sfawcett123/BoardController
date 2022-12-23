@@ -7,7 +7,7 @@ namespace BoardManager
     /// <summary>
     /// Information about a connected board
     /// </summary>
-    public class BoardDetails : IEquatable<BoardDetails?>, IDisposable
+    public sealed class BoardDetails : IEquatable<BoardDetails?>, IDisposable
     {
         #region constants
         /// <summary>
@@ -92,19 +92,12 @@ namespace BoardManager
         /// <returns></returns>
         public override string? ToString()
         {
-            return tcpListener is null ? "Unknown" : tcpListener.LocalEndpoint is null ? "Unknown" : tcpListener.LocalEndpoint.ToString();
+            if (tcpListener is null)
+                return "Unknown";
+            
+            return  tcpListener.LocalEndpoint is null ? "Unknown" : tcpListener.LocalEndpoint.ToString();
         }
-        /// <summary>
-        /// Comparison method
-        /// </summary>
-        /// <param name="other"></param>
-        /// <returns></returns>
-        public bool Equals(BoardDetails? other)
-        {
-            return other is not null &&
-                   Port == other.Port &&
-                   ip_address == other.ip_address;
-        }
+
         /// <summary>
         ///  Dispose of board
         /// </summary>
@@ -153,6 +146,17 @@ namespace BoardManager
             return obj is not null && Equals(obj as BoardDetails);
         }
         /// <summary>
+        /// Comparison method
+        /// </summary>
+        /// <param name="other"></param>
+        /// <returns></returns>
+        public bool Equals(BoardDetails? other)
+        {
+            return other is not null &&
+                   Port == other.Port &&
+                   ip_address == other.ip_address;
+        }
+        /// <summary>
         /// 
         /// </summary>
         /// <returns></returns>
@@ -171,8 +175,6 @@ namespace BoardManager
         private void ProcessBoard(object? state)
         {
             Timeout++;
-
-            //Console.WriteLine("Processing board [{0}]", timeout );
 
             if (tcpListener is null)
             {
@@ -259,18 +261,6 @@ namespace BoardManager
             Console.WriteLine("Listening on {0} , Port {1} for TCP data",
                                 System.Net.IPAddress.Parse(((IPEndPoint)tcpListener.LocalEndpoint).Address.ToString()),
                                 ((IPEndPoint)tcpListener.LocalEndpoint).Port.ToString());
-
-            //int i;
-            //NetworkStream stream = client.GetStream();
-            //byte[] bytes = new byte[client.ReceiveBufferSize];
-            //while ((i = stream.Read(bytes, 0, client.ReceiveBufferSize)) != 0)
-            //{
-            // Translate data bytes to a ASCII string.
-            // string data = System.Text.Encoding.ASCII.GetString(bytes, 0, i);
-            // TODO: Add code to handle incoming data
-            //Console.WriteLine("Received: {0}", data);
-            // } 
-
 
             _ = tcpClientConnected.Set();
         }
