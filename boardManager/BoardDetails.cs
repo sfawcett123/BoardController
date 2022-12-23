@@ -1,8 +1,9 @@
 ﻿using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.InteropServices;
 
-namespace BoardManager
+namespace BoardManager.boardManager
 {
     /// <summary>
     /// Information about a connected board
@@ -30,7 +31,7 @@ namespace BoardManager
         /// <summary>
         /// Board Name
         /// </summary>
-        public string Name { get; set; } = "unknown";
+        public string Name { get; set; } 
         /// <summary>
         /// IP address of board
         /// </summary>
@@ -55,7 +56,7 @@ namespace BoardManager
         /// <summary>
         /// Should this be public?
         /// </summary>
-        public int Timeout { get; private set; }
+        public int Timeout { get; set; }
 
         /// <summary>
         /// Hask of Board
@@ -74,7 +75,7 @@ namespace BoardManager
         /// <summary>Gets a value indicating whether [board internal].</summary>
         /// <value>
         ///   <c>true</c> if [board internal]; otherwise, <c>false</c>.</value>
-        public bool BoardInternal { get; internal set; } = false;
+        public bool BoardInternal { get; set; } = false;
         #endregion
 
         /// <summary>
@@ -83,6 +84,7 @@ namespace BoardManager
         public BoardDetails()
         {
             DoStart();
+            Name = "Unknown";
             _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
         }
         #region public methods
@@ -94,8 +96,8 @@ namespace BoardManager
         {
             if (tcpListener is null)
                 return "Unknown";
-            
-            return  tcpListener.LocalEndpoint is null ? "Unknown" : tcpListener.LocalEndpoint.ToString();
+
+            return tcpListener.LocalEndpoint is null ? "Unknown" : tcpListener.LocalEndpoint.ToString();
         }
 
         /// <summary>

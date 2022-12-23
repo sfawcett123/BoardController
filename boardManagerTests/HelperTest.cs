@@ -1,5 +1,5 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
-using BoardManager;
+using BoardManager.boardManager;
 
 namespace BoardManagerTests
 {
@@ -55,7 +55,7 @@ namespace BoardManagerTests
 
             var res = TestDictionaryOne.MergeLeft(TestDictionaryTwo).Serialize();
 
-            Assert.AreEqual("{\"KEY\":\"VALUE\"}", res );
+            Assert.AreEqual("{\"KEYONE\":\"VALUEONE\",\"KEYTWO\":\"VALUETWO\"}", res );
         }
     }
 }
