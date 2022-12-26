@@ -1,5 +1,4 @@
-﻿using BoardManager.boardManager;
-using Microsoft.VisualStudio.TestTools.UnitTesting;
+﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace BoardManager.BoardManagerTests
 {

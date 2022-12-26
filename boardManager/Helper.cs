@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace BoardManager.boardManager
+namespace BoardManager
 {
     public static class Helper
     {

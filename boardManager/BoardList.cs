@@ -5,7 +5,7 @@ using System.Net;
 using System.Runtime.CompilerServices;
 using System.Text.Json;
 
-namespace BoardManager.boardManager
+namespace BoardManager
 {
     /// <summary>
     /// List of Boards

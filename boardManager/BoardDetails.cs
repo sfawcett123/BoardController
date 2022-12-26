@@ -3,7 +3,7 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 
-namespace BoardManager.boardManager
+namespace BoardManager
 {
     /// <summary>
     /// Information about a connected board
