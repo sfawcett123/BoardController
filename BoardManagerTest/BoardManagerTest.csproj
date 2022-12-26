@@ -19,4 +19,10 @@
     <ProjectReference Include="..\BoardManager\BoardManager.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Reference Include="BoardManager">
+      <HintPath>..\BoardManager\bin\Release\net6.0\BoardManager.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
 </Project>
