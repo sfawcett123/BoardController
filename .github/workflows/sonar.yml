@@ -8,7 +8,7 @@ on:
 jobs:
   build:
     name: Build and analyze
-    runs-on: windows-latest
+    runs-on: ubuntu-latest
     steps:
 
       - uses: actions/checkout@v2
@@ -27,7 +27,6 @@ jobs:
         run:  dotnet restore
 
       - name: Install Code Coverage
-        shell: powershell
         run: |
           dotnet tool install --global dotnet-coverage
 
