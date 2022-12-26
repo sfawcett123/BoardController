@@ -37,19 +37,17 @@ jobs:
           dotnet sonarscanner begin \
             /k:"sfawcett123_BoardController" \
             /o:"sfawcett123" \
-            /d:sonar.login="${{ secrets.SONAR-TOKEN }}" \
+            /d:sonar.login="${{ secrets.SONAR_TOKEN }}" \
             /d:sonar.host.url="https://sonarcloud.io" \
             /d:sonar.cs.vstest.reportsPaths="**/*.trx" \
             /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
-            /d:sonar.coverage.exclusions="\
-                boardManagerTests/**/*,  \
-            " \
+            /d:sonar.coverage.exclusions="boardManagerTests/**/*" \
             /d:sonar.verbose=true \
             /d:sonar.log.level="DEBUG"
              dotnet build
              dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
              dotnet test --no-build --logger:trx 
-             dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR-TOKEN }}"
+             dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
