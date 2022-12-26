@@ -10,47 +10,50 @@ jobs:
     name: Build and analyze
     runs-on: windows-latest
     steps:
-      - name: Set up JDK 11
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.11
+
       - uses: actions/checkout@v2
         with:
           fetch-depth: 0  # Shallow clones should be disabled for a better relevancy of analysis
-      - name: Cache SonarCloud packages
-        uses: actions/cache@v1
-        with:
-          path: ~\sonar\cache
-          key: ${{ runner.os }}-sonar
-          restore-keys: ${{ runner.os }}-sonar
-      - name: Cache SonarCloud scanner
-        id: cache-sonar-scanner
-        uses: actions/cache@v1
-        with:
-          path: .\.sonar\scanner
-          key: ${{ runner.os }}-sonar-scanner
-          restore-keys: ${{ runner.os }}-sonar-scanner
 
-      - name: Install SonarCloud scanner
-        if: steps.cache-sonar-scanner.outputs.cache-hit != 'true'
-        shell: powershell
-        run: |
-          New-Item -Path .\.sonar\scanner -ItemType Directory
-          dotnet tool update dotnet-sonarscanner --tool-path .\.sonar\scanner
+      - name: Setup .NET Core
+        uses: actions/setup-dotnet@v3
+        with:
+          dotnet-version: '7.0'
+
+      - name: Install dotnet-sonarscanner
+        run:  dotnet tool install --global dotnet-sonarscanner --version 5.9.1
+
+      - name: Install dependencies
+        run:  dotnet restore
 
       - name: Install Code Coverage
         shell: powershell
         run: |
           dotnet tool install --global dotnet-coverage
 
-      - name: Build and analyze
+      - name: SonarCloud
         env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Needed to get PR information, if any
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        shell: powershell
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
-          .\.sonar\scanner\dotnet-sonarscanner begin /k:"sfawcett123_BoardController" /o:"sfawcett123" /d:sonar.cs.vstest.reportsPaths="TestResults/*.trx" /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml  /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"
-          dotnet build
-          dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
-          dotnet test --no-build --logger:trx 
-          .\.sonar\scanner\dotnet-sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+          dotnet sonarscanner begin \
+            /k:"sfawcett123_BoardController" \
+            /o:"sfawcett123" \
+            /d:sonar.login="${{ secrets.SONAR-TOKEN }}" \
+            /d:sonar.host.url="https://sonarcloud.io" \
+            /d:sonar.cs.vstest.reportsPaths="**/*.trx" \
+            /d:sonar.cs.vscoveragexml.reportsPaths=coverage.xml \
+            /d:sonar.coverage.exclusions="\
+                boardManagerTests/**/*,  \
+            " \
+            /d:sonar.verbose=true \
+            /d:sonar.log.level="DEBUG"
+             dotnet build
+             dotnet-coverage collect 'dotnet test' -f xml  -o 'coverage.xml'
+             dotnet test --no-build --logger:trx 
+             dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR-TOKEN }}"
+
+      - name: Publish Test Results
+        uses: EnricoMi/publish-unit-test-result-action@v2
+        if: always()
+        with:
+           trx_files: "TestResults/*.trx"
