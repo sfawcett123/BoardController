@@ -1,7 +1,7 @@
 ﻿using BoardManager.boardManager;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
-namespace BoardManagerTests
+namespace BoardManager.BoardManagerTests
 {
     /// <exclude />
     [TestClass]
@@ -18,7 +18,7 @@ namespace BoardManagerTests
                 Outputs = new() { "PLANE ALTITUDE" },
             };
 
-            Assert.AreEqual("PLANE ALTITUDE", brd.Outputs[0] );
+            Assert.AreEqual("PLANE ALTITUDE", brd.Outputs[0]);
 
         }
 
@@ -27,7 +27,7 @@ namespace BoardManagerTests
         public void TestValidateGood()
         {
             string result = Board.ValidateOS("ARDUINO");
-            Assert.AreEqual(result, OperatingSystems.ARDUINO.ToString() );
+            Assert.AreEqual(result, OperatingSystems.ARDUINO.ToString());
         }
 
         /// <exclude />

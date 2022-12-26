@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using BoardManager.boardManager;
 
-namespace BoardManagerTests
+namespace BoardManager.BoardManagerTests
 {
     /// <exclude />
     [TestClass]
@@ -16,8 +16,8 @@ namespace BoardManagerTests
                 { "KEY", "VALUE" }
             };
 
-            
-            Assert.AreEqual("{\"KEY\":\"VALUE\"}", TestDictionary.Serialize() );
+
+            Assert.AreEqual("{\"KEY\":\"VALUE\"}", TestDictionary.Serialize());
         }
 
         /// <exclude />
@@ -36,7 +36,7 @@ namespace BoardManagerTests
 
             var res = TestDictionaryOne.MergeLeft(TestDictionaryTwo).Serialize();
 
-            Assert.AreEqual("{\"KEY\":\"VALUE\"}",  res);
+            Assert.AreEqual("{\"KEY\":\"VALUE\"}", res);
         }
 
         /// <exclude />
@@ -55,7 +55,7 @@ namespace BoardManagerTests
 
             var res = TestDictionaryOne.MergeLeft(TestDictionaryTwo).Serialize();
 
-            Assert.AreEqual("{\"KEYONE\":\"VALUEONE\",\"KEYTWO\":\"VALUETWO\"}", res );
+            Assert.AreEqual("{\"KEYONE\":\"VALUEONE\",\"KEYTWO\":\"VALUETWO\"}", res);
         }
     }
 }

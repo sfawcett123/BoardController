@@ -2,7 +2,7 @@
 
 namespace BoardManager.boardManager
 {
-    internal static class Helper
+    public static class Helper
     {
         public static string Serialize(this Dictionary<string, string> input)
         {
