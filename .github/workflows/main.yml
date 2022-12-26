@@ -23,7 +23,7 @@ jobs:
         run:  dotnet restore
 
       - name: Build
-        run:  dotnet build  --no-incremental --configuration Release --no-dependencies --nologo
+        run:  dotnet build  --no-incremental --configuration Release --nologo
 
   test:
     name: Test 
