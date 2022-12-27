@@ -31,8 +31,15 @@ jobs:
     needs: [ build ]
     steps:
     
+      - name: Install dotnet-sonarscanner
+        run:  dotnet tool install --global dotnet-sonarscanner --version 5.9.1
+
       - name: Test
-        run:  dotnet test --no-build --logger:trx  --verbosity normal
+        run:  |
+                dotnet sonarscanner begin /d:sonar.login="${{ steps.keyvault-yaml-secret.outputs.SONAR_TOKEN }}"
+                dotnet build
+                dotnet test --no-build --logger:trx -e:CollectCoverage=true -e:CoverletOutputFormat=opencover
+                dotnet sonarscanner end  /d:sonar.login="${{ steps.keyvault-yaml-secret.outputs.SONAR_TOKEN }}"
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
