@@ -24,7 +24,7 @@ jobs:
 
       - name: Test
         run:  |
-                dotnet restore
+                dotnet restore --configuration Release
                 dotnet sonarscanner begin /k:"sfawcett123_BoardController" /o:"sfawcett123" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" 
                 dotnet build --no-incremental --configuration Release --nologo
                 dotnet test --no-build --logger:trx  --configuration Release
@@ -43,4 +43,4 @@ jobs:
     if: github.ref == 'refs/heads/master'
     steps:
       - name: Publish
-        run: dotnet nuget push **/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}}
+        run: dotnet nuget push **/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --configuration Release
