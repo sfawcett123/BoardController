@@ -20,7 +20,7 @@ jobs:
             dotnet-version: 7.0.x
     
       - name: Install dotnet-sonarscanner
-        run:  dotnet tool install --global dotnet-sonarscanner --version 5.9.1
+        run:  dotnet tool install --global dotnet-sonarscanner
 
       - name: Test
         run:  |
@@ -29,6 +29,9 @@ jobs:
                 dotnet build --no-incremental --configuration Release --nologo
                 dotnet test --no-build --logger:trx  --configuration Release
                 dotnet sonarscanner end  /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
 
       - name: Publish Test Results
         uses: EnricoMi/publish-unit-test-result-action@v2
