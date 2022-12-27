@@ -16,13 +16,10 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\BoardManager\BoardManager.csproj" />
+    <ProjectReference Include="..\BoardManager\BoardManager.csproj">
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
-  <ItemGroup>
-    <Reference Include="BoardManager">
-      <HintPath>../BoardManager/bin/Release/net7.0/BoardManager.dll</HintPath>
-    </Reference>
-  </ItemGroup>
 
 </Project>
