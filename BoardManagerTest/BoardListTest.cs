@@ -33,7 +33,7 @@ namespace BoardManager.BoardManagerTests
             string result = bd.Add(testBoard1);
 
             Assert.IsNotNull(result);
-            Dictionary<string, string> data = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
+            Dictionary<string, string>? data = JsonSerializer.Deserialize<Dictionary<string, string>>(result);
 
             Assert.IsNotNull(data);
             Assert.AreEqual(testBoard1.Name, data["name"]);
