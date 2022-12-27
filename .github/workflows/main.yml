@@ -25,8 +25,8 @@ jobs:
       - name: Test
         run:  |
                 dotnet restore
-                dotnet sonarscanner begin /k:"sfawcett123_BoardController" /o:"sfawcett123" /d:sonar.cs.vstest.reportsPaths="BoardManagerTest/TestResults/*.trx" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io"  
-                dotnet build
+                dotnet sonarscanner begin /k:"sfawcett123_BoardController" /o:"sfawcett123" /d:sonar.login="${{ secrets.SONAR_TOKEN }}" /d:sonar.host.url="https://sonarcloud.io" 
+                dotnet build --no-incremental --configuration Release --nologo
                 dotnet test --no-build --logger:trx 
                 dotnet sonarscanner end  /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
 
