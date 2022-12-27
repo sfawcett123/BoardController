@@ -1,4 +1,7 @@
 # TCP/IP handler for board mulitplexing
+
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sfawcett123_BoardController&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sfawcett123_BoardController)
+
 ## Purpose
 when building the listener for the Microsoft Flight Simulator (MFS) 
 I wanted to allow TCP/IP connections to the interface on a various ports, for registered boards.
