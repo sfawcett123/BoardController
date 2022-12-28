@@ -33,8 +33,8 @@ jobs:
                                           /d:sonar.host.url="https://sonarcloud.io" \
                                           /d:sonar.cs.opencover.reportsPaths="BoardManagerTest/coverage.opencover.xml" \
                                           /d:sonar.cs.vstest.reportsPaths="BoardManagerTest/TestResults/*.trx"
-                dotnet build --no-incremental --configuration Release --nologo 
-                dotnet test --no-build --logger:trx  --configuration Release -e:CollectCoverage=true -e:CoverletOutputFormat=opencover
+                dotnet build --no-incremental --nologo 
+                dotnet test --no-build --logger:trx  -e:CollectCoverage=true -e:CoverletOutputFormat=opencover
                 dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
