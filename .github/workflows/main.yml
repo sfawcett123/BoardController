@@ -33,7 +33,7 @@ jobs:
                                           /d:sonar.host.url="https://sonarcloud.io" \
                                           /d:sonar.cs.opencover.reportsPaths="BoardManagerTest/coverage.opencover.xml" \
                                           /d:sonar.cs.vstest.reportsPaths="BoardManagerTest/TestResults/*.trx"
-                dotnet build --no-incremental --configuration Release --nologo
+                dotnet build --no-incremental --configuration Release --nologo 
                 dotnet test --no-build --logger:trx  --configuration Release -e:CollectCoverage=true -e:CoverletOutputFormat=opencover
                 dotnet sonarscanner end /d:sonar.login="${{ secrets.SONAR_TOKEN }}"
         env:
@@ -45,6 +45,26 @@ jobs:
         if: always()
         with:
            trx_files: "BoardManagerTest/TestResults/*.trx"
+           
+      - name: Bump version and push tag
+        if: github.ref == 'refs/heads/main'
+        id: tag_version
+        uses: mathieudutour/github-tag-action@v6.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          
+      - name: Create a GitHub release
+        if: github.ref == 'refs/heads/main'
+        uses: ncipollo/release-action@v1
+        with:
+          tag: ${{ steps.tag_version.outputs.new_tag }}
+          name: Release ${{ steps.tag_version.outputs.new_tag }}
+          body: ${{ steps.tag_version.outputs.changelog }}
+
+      - name: Create Nuget Package
+        if: github.ref == 'refs/heads/main'
+        run: |
+             dotnet build -c Release -p:PackageVersion=${{ steps.tag_version.outputs.new_version }} 
 
       - name: Publish
         if: github.ref == 'refs/heads/main'
