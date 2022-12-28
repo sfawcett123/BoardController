@@ -1,5 +1,6 @@
 name: Build/Test/Deploy
 on:
+  release:
   push:
     branches:
       - main
