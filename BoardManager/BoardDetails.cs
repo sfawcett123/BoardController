@@ -202,10 +202,20 @@ namespace BoardManager
         {
             if (BoardInternal is true) return;
 
-            // TODO: Do not use hard coded IP address
-            IPAddress local_ip_address = System.Net.IPAddress.Parse("192.168.1.134");
+            IPAddress local_ip_address = GetIPAddress();
+
             tcpListener = GetNextAvailablePort(local_ip_address);
         }
+
+        private IPAddress GetIPAddress()
+        {
+            IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); 
+            
+            if( ipHostInfo is not null ) return ipHostInfo.AddressList[0];
+            
+            return System.Net.IPAddress.Parse("127.0.0.1");
+        }
+
         private void DoBeginAcceptTcpClient()
         {
             _ = tcpClientConnected.Reset();

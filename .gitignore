@@ -43,3 +43,4 @@ obj/
 /.sonarqube/conf/Sonar-cs.ruleset
 /.sonarqube/conf/Sonar-cs-none.ruleset
 /.sonarqube/conf/cs/SonarLint.xml
+/BoardManagerTest/coverage.opencover.xml
