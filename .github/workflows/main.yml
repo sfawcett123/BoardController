@@ -100,7 +100,7 @@ jobs:
         dotnet-version: 7.0.x
         
     - name: Push Package to GitHub
-      run: dotnet nuget push --api-key ${{secrets.GITHUB_TOKEN}} --source "https://nuget.pkg.github.com/hughesjs/index.json" *.nupkg
+      run: dotnet nuget push --api-key ${{secrets.GITHUB_TOKEN}} --source "https://nuget.pkg.github.com/sfawcett123/index.json" *.nupkg
 
   nuget-publish:
     needs: package
