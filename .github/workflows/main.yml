@@ -47,5 +47,5 @@ jobs:
            trx_files: "BoardManagerTest/TestResults/*.trx"
 
       - name: Publish
-        if: github.ref == 'refs/heads/master'
+        if: github.ref == 'refs/heads/main'
         run: dotnet nuget push **/*.nupkg --skip-duplicate --source https://api.nuget.org/v3/index.json -k ${{secrets.NUGET_API_KEY}} --configuration Release

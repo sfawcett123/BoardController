@@ -207,7 +207,7 @@ namespace BoardManager
             tcpListener = GetNextAvailablePort(local_ip_address);
         }
 
-        private IPAddress GetIPAddress()
+        private static IPAddress GetIPAddress()
         {
             IPHostEntry ipHostInfo = Dns.GetHostEntry(Dns.GetHostName()); 
             

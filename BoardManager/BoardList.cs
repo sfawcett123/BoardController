@@ -34,14 +34,9 @@ namespace BoardManager
         {
             string _ip_address = "127.0.0.1";
 
-            if (_request is not null)
-            {
-                if (_request.RemoteIpAddress is not null)
-                {
-                    _ip_address = _request.RemoteIpAddress.ToString();
-                }
-            }
-
+            if (_request is not null && _request.RemoteIpAddress is not null)
+                     _ip_address = _request.RemoteIpAddress.ToString();
+                        
             Console.WriteLine("Request from " + _ip_address + " Name = " + _board.Name);
 
             BoardDetails _bd = new()
@@ -106,7 +101,7 @@ namespace BoardManager
         {
             Dictionary<string, string> all_data = new();
 
-            foreach (BoardDetails b in boards.Where(x => x is not null))
+            foreach (BoardDetails b in boards.Where(x => x is not null ))
             {
                 if (b.OutputData != null)
                 {
