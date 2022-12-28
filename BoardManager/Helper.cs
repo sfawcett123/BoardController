@@ -1,8 +1,8 @@
 ﻿using System.Text.Json;
 
-namespace BoardManager.boardManager
+namespace BoardManager
 {
-    internal static class Helper
+    public static class Helper
     {
         public static string Serialize(this Dictionary<string, string> input)
         {

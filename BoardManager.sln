@@ -1,9 +1,26 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
-VisualStudioVersion = 17.4.33122.133
+VisualStudioVersion = 17.4.33205.214
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardManager", "BoardManager.csproj", "{77ED05B1-A2F4-4FE1-8455-878CD2AD0CD0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardManager", "BoardManager\BoardManager.csproj", "{C564CF61-A161-4F20-BC3D-2D25D96A6263}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BoardManagerTest", "BoardManagerTest\BoardManagerTest.csproj", "{294BED0C-0141-4327-8B5C-45426B95403F}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github", "github", "{489BE40B-EA66-4B3E-B9B0-3786F681CD05}"
+	ProjectSection(SolutionItems) = preProject
+		.github\dependabot.yml = .github\dependabot.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{EC5C2D74-BDE8-4FA1-8C35-ADF1D59BAFE7}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\main.yml = .github\workflows\main.yml
+	EndProjectSection
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Configuration", "Configuration", "{82B339B2-A3DA-46B2-A23B-773914419531}"
+	ProjectSection(SolutionItems) = preProject
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,15 +28,22 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{77ED05B1-A2F4-4FE1-8455-878CD2AD0CD0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{77ED05B1-A2F4-4FE1-8455-878CD2AD0CD0}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{77ED05B1-A2F4-4FE1-8455-878CD2AD0CD0}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{77ED05B1-A2F4-4FE1-8455-878CD2AD0CD0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C564CF61-A161-4F20-BC3D-2D25D96A6263}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C564CF61-A161-4F20-BC3D-2D25D96A6263}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C564CF61-A161-4F20-BC3D-2D25D96A6263}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C564CF61-A161-4F20-BC3D-2D25D96A6263}.Release|Any CPU.Build.0 = Release|Any CPU
+		{294BED0C-0141-4327-8B5C-45426B95403F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{294BED0C-0141-4327-8B5C-45426B95403F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{294BED0C-0141-4327-8B5C-45426B95403F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{294BED0C-0141-4327-8B5C-45426B95403F}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{EC5C2D74-BDE8-4FA1-8C35-ADF1D59BAFE7} = {489BE40B-EA66-4B3E-B9B0-3786F681CD05}
+	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
-		SolutionGuid = {2B2E7C1B-1E33-4427-A7F7-A32BC066AFD2}
+		SolutionGuid = {64CB34E0-F540-4211-B65E-F135C292B230}
 	EndGlobalSection
 EndGlobal
