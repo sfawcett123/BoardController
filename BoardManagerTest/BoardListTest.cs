@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 using System.Text.Json;
 
 
-namespace BoardManager.BoardManagerTests
+namespace BoardManagerTests
 {
     /// <exclude />
     [TestClass]

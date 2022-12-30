@@ -15,6 +15,7 @@ using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
+using System.Security.Cryptography.X509Certificates;
 
 namespace BoardManager
 {
@@ -46,7 +47,7 @@ namespace BoardManager
         /// <summary>
         /// The timer
         /// </summary>
-        private readonly Timer _timer;
+        private Timer? _timer;
         /// <summary>
         /// The TCP client connected
         /// </summary>
@@ -98,6 +99,7 @@ namespace BoardManager
         /// <value>The timeout.</value>
         public int Timeout { get; set; }
 
+        public bool TimeStarted {  get { return _timer != null; } }
         /// <summary>
         /// Hash of Board
         /// </summary>
@@ -122,23 +124,28 @@ namespace BoardManager
         /// <summary>
         /// Constructor
         /// </summary>
-        public BoardDetails()
+        public BoardDetails( bool start=true )
         {
-            DoStart();
             Name = "Unknown";
-            _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
+            if (start) Start();
         }
+
         #region public methods
         /// <summary>
         /// Override the ToString Method
         /// </summary>
         /// <returns>A <see cref="System.String" /> that represents this instance.</returns>
-        public override string? ToString()
+        public override string ToString()
         {
-            if (tcpListener is null)
+            if ( tcpListener == null)
                 return "Unknown";
 
-            return tcpListener.LocalEndpoint is null ? "Unknown" : tcpListener.LocalEndpoint.ToString();
+            var x = tcpListener.LocalEndpoint.ToString();
+            if ( x == null )
+                return "Unknown";
+            else
+                return x.ToString();
+
         }
 
         /// <summary>
@@ -225,7 +232,7 @@ namespace BoardManager
 
             if (tcpListener is null)
             {
-                DoStart();
+                Start();
                 DoBeginAcceptTcpClient();
             }
             else
@@ -244,10 +251,12 @@ namespace BoardManager
             }
         }
         /// <summary>
-        /// Does the start.
+        /// Starts TCP Connection to a board
         /// </summary>
-        private void DoStart()
+        public void Start()
         {
+            _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
+
             if (BoardInternal is true) return;
 
             IPAddress local_ip_address = GetIPAddress();

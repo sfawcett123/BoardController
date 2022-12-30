@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
+using BoardManager;
 
-namespace BoardManager.BoardManagerTests
+namespace BoardManagerTests
 {
     /// <exclude />
     [TestClass]
