@@ -1,4 +1,17 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿// ***********************************************************************
+// Assembly         : BoardManager
+// Author           : steve
+// Created          : 12-30-2022
+//
+// Last Modified By : steve
+// Last Modified On : 12-30-2022
+// ***********************************************************************
+// <copyright file="BoardList.cs" company="BoardManager">
+//     Steven Fawcett
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using Microsoft.AspNetCore.Http;
 using System.Collections.Immutable;
 using System.Net.Sockets;
 using System.Net;
@@ -12,14 +25,16 @@ namespace BoardManager
     /// </summary>
     public abstract class BoardList
     {
-        /// <summary>The boards</summary>
+        /// <summary>
+        /// The boards
+        /// </summary>
         private readonly List<BoardDetails> boards = new();
 
-        /// <summary>Adds the specified board.</summary>
+        /// <summary>
+        /// Adds the specified board.
+        /// </summary>
         /// <param name="_board">The board.</param>
-        /// <returns>
-        ///   <br />
-        /// </returns>
+        /// <returns><br /></returns>
         public string Add(Board _board)
         {
             return Add(_board, null);
@@ -27,9 +42,9 @@ namespace BoardManager
         /// <summary>
         /// Add another board
         /// </summary>
-        /// <param name="_board"></param>
-        /// <param name="_request"></param>
-        /// <returns></returns>
+        /// <param name="_board">The board.</param>
+        /// <param name="_request">The request.</param>
+        /// <returns>System.String.</returns>
         public string Add(Board _board, ConnectionInfo? _request)
         {
             string _ip_address = "127.0.0.1";
@@ -60,6 +75,7 @@ namespace BoardManager
         /// <summary>
         /// Remove Timed out boards
         /// </summary>
+        /// <param name="timeout">The timeout.</param>
         public void RemoveTimedOut( int timeout = BoardDetails.TIMEOUT )
         {
             foreach (BoardDetails b in boards.Where(s => s.Timeout > timeout).ToArray<BoardDetails>())
@@ -75,7 +91,7 @@ namespace BoardManager
         /// <summary>
         /// Convert board data to JSON
         /// </summary>
-        /// <returns></returns>
+        /// <returns>System.String.</returns>
         public string Serialize()
         {
             return JsonSerializer.Serialize(boards);
@@ -83,9 +99,9 @@ namespace BoardManager
         /// <summary>
         /// For each board set the output data
         /// </summary>
-        /// <param name="fs_data"></param>
+        /// <param name="fs_data">The fs data.</param>
         // TODO: Output data needs to be specific to each boards requirements
-        // current implemtation has all boards set to all data
+        // current implementation has all boards set to all data
 
         public void SetOutputData(Dictionary<string, string> fs_data)
         {
@@ -95,7 +111,9 @@ namespace BoardManager
             }
         }
 
-        /// <summary>Gets all output data.</summary>
+        /// <summary>
+        /// Gets all output data.
+        /// </summary>
         /// <returns>A dictionary of all outputs from every registered board.</returns>
         public Dictionary<string, string> GetAllOutputData()
         {
@@ -112,10 +130,10 @@ namespace BoardManager
             return all_data;
         }
 
-        /// <summary>Gets the boards.</summary>
-        /// <returns>
-        ///   <br />
-        /// </returns>
+        /// <summary>
+        /// Gets the boards.
+        /// </summary>
+        /// <returns><br /></returns>
         public List<BoardDetails> GetBoards()
         {
             return boards;
