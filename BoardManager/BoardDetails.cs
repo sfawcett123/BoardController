@@ -52,9 +52,7 @@ namespace BoardManager
         /// The TCP client connected
         /// </summary>
         private static readonly ManualResetEvent tcpClientConnected = new(false);
-        /// <summary>
-        /// The baseport
-        /// </summary>
+        /// <summary>The baseport</summary>
         private readonly int baseport = 9000;
         /// <summary>
         /// The last string
@@ -131,6 +129,21 @@ namespace BoardManager
         }
 
         #region public methods
+
+        /// <summary>
+        /// Starts TCP Connection to a board
+        /// </summary>
+        public void Start()
+        {
+            _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
+
+            if (BoardInternal is true) return;
+
+            IPAddress local_ip_address = GetIPAddress();
+
+            tcpListener = GetNextAvailablePort(local_ip_address);
+        }
+
         /// <summary>
         /// Override the ToString Method
         /// </summary>
@@ -250,19 +263,7 @@ namespace BoardManager
                 }
             }
         }
-        /// <summary>
-        /// Starts TCP Connection to a board
-        /// </summary>
-        public void Start()
-        {
-            _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
 
-            if (BoardInternal is true) return;
-
-            IPAddress local_ip_address = GetIPAddress();
-
-            tcpListener = GetNextAvailablePort(local_ip_address);
-        }
 
         /// <summary>
         /// Gets the ip address.
