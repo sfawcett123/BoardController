@@ -51,8 +51,6 @@ namespace BoardManager
 
             if (_request is not null && _request.RemoteIpAddress is not null)
                      _ip_address = _request.RemoteIpAddress.ToString();
-                        
-            Console.WriteLine("Request from " + _ip_address + " Name = " + _board.Name);
 
             BoardDetails _bd = new()
             {
@@ -80,7 +78,6 @@ namespace BoardManager
         {
             foreach (BoardDetails b in boards.Where(s => s.Timeout > timeout).ToArray<BoardDetails>())
             {
-                Console.WriteLine(b.Name + " " + b.Timeout + " > " + timeout );
                 if (!b.BoardInternal)
                 {
                     _ = boards.Remove(b);
