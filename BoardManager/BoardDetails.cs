@@ -287,8 +287,6 @@ namespace BoardManager
 
             if (tcpListener is not null)
             {
-                Console.WriteLine("Waiting for a connection from {0}:{1}", ip_address, Port);
-
                 _ = tcpListener.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), tcpListener);
             }
             _ = tcpClientConnected.WaitOne();
@@ -325,7 +323,6 @@ namespace BoardManager
             }
             catch
             {
-                Console.WriteLine("Connection on {0}:{1} Lost", ip_address, Port);
                 client.Close();
             }
         }
@@ -343,9 +340,6 @@ namespace BoardManager
             client = tcpListener.EndAcceptTcpClient(ar);
 
             Timeout = 0;
-            Console.WriteLine("Listening on {0} , Port {1} for TCP data",
-                                System.Net.IPAddress.Parse(((IPEndPoint)tcpListener.LocalEndpoint).Address.ToString()),
-                                ((IPEndPoint)tcpListener.LocalEndpoint).Port.ToString());
 
             _ = tcpClientConnected.Set();
         }
@@ -383,7 +377,6 @@ namespace BoardManager
                     {
                         TcpListener _local = new(local_ip_address, _port);
                         _local.Start();
-                        Console.WriteLine("Starting board on {0} port {1}", local_ip_address, _port);
                         Port = _port;
                         return _local;
                     }
