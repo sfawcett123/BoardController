@@ -1,6 +1,7 @@
 # TCP/IP handler for board mulitplexing
 
 [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=sfawcett123_BoardController&metric=alert_status)](https://sonarcloud.io/summary/new_code?id=sfawcett123_BoardController)
+[![codecov](https://codecov.io/gh/sfawcett123/BoardController/branch/main/graph/badge.svg?token=2D6BX22N6Q)](https://codecov.io/gh/sfawcett123/BoardController)
 
 ## Purpose
 when building the listener for the Microsoft Flight Simulator (MFS) 
