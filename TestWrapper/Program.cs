@@ -26,7 +26,7 @@ if (data == null)
     Environment.Exit(1);
 }
 
-Console.WriteLine("Connected");
+Console.WriteLine("Connection");
 
 // Loop until end read and write data
 for ( int i = 0; i < 10000 ; i++)
@@ -35,9 +35,11 @@ for ( int i = 0; i < 10000 ; i++)
     Dictionary<string, string> tempdata = new() { { DATASET, $"{i}" } };
     bd.SetOutputData(tempdata);
 
-    // Get the output data
-    var x = bd.GetAllOutputData();
-
+    // Get the input data
+    foreach( var b in bd.GetAllInputData() )
+    {
+        Console.WriteLine( b.Key+ ": " + b.Value ); 
+    }
     // Hang about a little
-   Thread.Sleep(1000) ;
+    Thread.Sleep(1000) ;
 }

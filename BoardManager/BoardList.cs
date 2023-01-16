@@ -127,6 +127,21 @@ namespace BoardManager
             return all_data;
         }
 
+        public Dictionary<string, string> GetAllInputData()
+        {
+            Dictionary<string, string> all_data = new();
+
+            foreach (BoardDetails b in boards.Where(x => x is not null))
+            {
+                if (b.InputData != null)
+                {
+                    all_data = all_data.MergeLeft(b.InputData);
+                }
+            }
+
+            return all_data;
+        }
+
         /// <summary>
         /// Gets the boards.
         /// </summary>

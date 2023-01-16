@@ -3,22 +3,32 @@ using System.Data;
 using System.Net;
 using System.Net.NetworkInformation;
 using System.Net.Sockets;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 
 
 namespace BoardManager
 {
+    internal enum ConnectState
+    {
+        Connected,
+        Disconnected,
+        Pending,
+    }
     class TcpServer
     {
         public int Port { get; }
+        public ConnectState Connection { get; internal set; }
+
         private readonly TcpListener server ;
         private TcpClient? client;
         private string last = string.Empty;
 
         private static readonly ManualResetEvent tcpClientConnected = new(false);
         public TcpServer(int port)
-        {;
+        {
+            Connection = ConnectState.Disconnected;
             this.Port = port;
             server = new TcpListener(IPAddress.Any, port);
             server.Start();
@@ -56,24 +66,47 @@ namespace BoardManager
 
         public void WriteData( string msg )
         {
-            if (client != null)
+            // If we loose connection lets restart listener to see if it comes back
+            if (Connection == ConnectState.Disconnected )
             {
+                DoBeginAcceptTcpClient();
+            }
+
+            // We are  connected lets write out data
+            if (client != null && Connection == ConnectState.Connected)
+            {
+                // Only write message out if it differs
                 if (last != msg)
                 {
-                    Console.WriteLine($"Writing to Port {Port} -> {msg}");
-
-                    WriteLine(client, msg);
+                    WriteLine(msg);
 
                     last = msg;
                 }
             }
         }
+
+        public string ReadData()
+        {
+            // If we loose connection lets restart listener to see if it comes back
+            if (Connection == ConnectState.Disconnected)
+            {
+                DoBeginAcceptTcpClient();
+            }
+
+            // We are not connected so no need to read data
+            if (client == null || Connection != ConnectState.Connected) return "";
+
+            return ReadLine();
+        }
         private void DoBeginAcceptTcpClient()
         {
+            // If we are connected or pending then we don't need to proceed.
+            if (Connection != ConnectState.Disconnected) return;
+
             tcpClientConnected.Reset();
+            Connection = ConnectState.Pending ;
 
-            Console.WriteLine("Waiting for a connection...");
-
+            // Wait for a connection
             server.BeginAcceptTcpClient(new AsyncCallback(DoAcceptTcpClientCallback), server);
 
             tcpClientConnected.WaitOne();
@@ -84,16 +117,18 @@ namespace BoardManager
             if( ar == null) { return; }
             if( ar.AsyncState == null) { return; }
 
+            // We have a connection. Create a client 
+
             TcpListener listener = (TcpListener)ar.AsyncState;
 
             client = listener.EndAcceptTcpClient(ar);
-
-            Console.WriteLine("Client connected completed");
+            
+            Connection = ConnectState.Connected;
 
             tcpClientConnected.Set();
         }
 
-        private static void WriteLine(TcpClient client , string _str)
+        private void WriteLine( string _str)
         {
             if (client == null) return;
 
@@ -101,13 +136,36 @@ namespace BoardManager
             {
                 NetworkStream stream = client.GetStream();
                 byte[] msg = System.Text.Encoding.ASCII.GetBytes(_str);
-                stream.Write(msg, 0, msg.Length);
+                stream.Write(msg, 0, msg.Length);    
             }
             catch
             {
-                Console.WriteLine("Connection lost");
+                // We lost our connection, Flag the system so it can reset
+                Connection = ConnectState.Disconnected;
+                client?.Close();                     
+            }
+        }
+
+        private string ReadLine()
+        {
+            if (client == null) return "";
+
+            try
+            {
+                NetworkStream stream = client.GetStream();
+                byte[] receiveBuffer = new byte[1024];
+                int bytesReceived = stream.Read(receiveBuffer);
+                string data = Encoding.UTF8.GetString(receiveBuffer.AsSpan(0, bytesReceived));
+                return data;
+            }
+            catch
+            {
+                // We lost our connection, Flag the system so it can reset
+                Connection = ConnectState.Disconnected;
                 client?.Close();
             }
+
+            return "";
         }
     }
 }

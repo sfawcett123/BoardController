@@ -16,6 +16,8 @@ using System.Net.NetworkInformation;
 using System.Net.Sockets;
 using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
+using System.Text.Json.Nodes;
+using System.Text.Json;
 
 namespace BoardManager
 {
@@ -73,6 +75,7 @@ namespace BoardManager
         /// </summary>
         /// <value>The output data.</value>
         public Dictionary<string, string>? OutputData { get; internal set; }
+        public Dictionary<string, string>? InputData { get; internal set; }
 
         /// <summary>Sample Rate </summary>
         /// <value>Sample rate in seconds</value>
@@ -150,6 +153,33 @@ namespace BoardManager
         private void ProcessBoard(object? state)
         {
             if ( OutputData != null ) tcpServer.WriteData( OutputData.Serialize() );
+
+            string json_data = tcpServer.ReadData();
+
+            if (json_data.Length > 0 )
+            {
+                try
+                {
+                    var newdata = JsonSerializer.Deserialize<Dictionary<string, string>>(json_data);
+                    if (newdata != null)
+                    {
+
+                        if (InputData != null)
+                        {
+                            InputData = InputData.MergeLeft(newdata);
+                        }
+                        else
+                        {
+                            InputData = newdata;
+                        }
+                    }
+                    
+                }
+                catch {
+                    Console.WriteLine("Invalid Json");
+                }                
+            }
+
         }
 
         #endregion
