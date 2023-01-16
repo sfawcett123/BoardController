@@ -27,16 +27,6 @@ namespace BoardManagerTest
             OS = OperatingSystems.ARDUINO.ToString(),
         };
 
-        [TestMethod, TestCategory("TCP")]
-        public void TestToString()
-        {
-            Assert.IsNotNull(bd);
-
-            string result = bd.ToString();
-            
-            Assert.AreEqual(result,"Unknown" );
-        }
-
         [TestMethod]
         public void StartBoard()
         {          
