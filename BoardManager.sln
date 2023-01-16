@@ -43,7 +43,7 @@ Project("{E24C65DC-7377-472B-9ABA-BC803B73C61A}") = "Help", "Help\", "{467CDD18-
 		SlnRelativePath = "Help\"
 	EndProjectSection
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestWrapper", "TestWrapper\TestWrapper.csproj", "{40A5C98E-F2A1-4EB2-986D-7383ECEF97D2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestWrapper", "TestWrapper\TestWrapper.csproj", "{40A5C98E-F2A1-4EB2-986D-7383ECEF97D2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -63,7 +63,6 @@ Global
 		{40A5C98E-F2A1-4EB2-986D-7383ECEF97D2}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{40A5C98E-F2A1-4EB2-986D-7383ECEF97D2}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{40A5C98E-F2A1-4EB2-986D-7383ECEF97D2}.Release|Any CPU.ActiveCfg = Debug|Any CPU
-		{40A5C98E-F2A1-4EB2-986D-7383ECEF97D2}.Release|Any CPU.Build.0 = Debug|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

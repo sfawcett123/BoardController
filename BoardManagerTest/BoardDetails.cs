@@ -15,7 +15,6 @@ namespace BoardManagerTest
         {
             Name = "TEST",
             BoardInternal = true,
-            IPAddress = "127.0.0.1",
             Rate = 1,
             OS = OperatingSystems.ARDUINO.ToString(),
         };
@@ -24,12 +23,11 @@ namespace BoardManagerTest
         {
             Name = "TEST2",
             BoardInternal = true,
-            IPAddress = "127.0.0.1",
             Rate = 1,
             OS = OperatingSystems.ARDUINO.ToString(),
         };
 
-        [TestMethod]
+        [TestMethod, TestCategory("TCP")]
         public void TestToString()
         {
             Assert.IsNotNull(bd);

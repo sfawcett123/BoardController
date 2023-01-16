@@ -51,7 +51,6 @@ namespace BoardManager
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; set; }
-        public int Port { get; set; }
         /// <summary>
         /// Sample Rate
         /// </summary>
@@ -94,10 +93,7 @@ namespace BoardManager
         {
             Name = "Unknown";
             IPAddress = "127.0.0.1";
-
-            int port = TcpServer.GetNextAvailablePort(BASEPORT);
-
-            tcpServer = new TcpServer(port);
+            tcpServer = new TcpServer(BASEPORT);
 
             if (start) Start();
 
@@ -138,7 +134,7 @@ namespace BoardManager
         {
             Dictionary<string, string> _serial = new() { { "name"      , Name            },
                                                          { "ip_address", "IPAddress"     },
-                                                         { "Port"      , Port.ToString() },
+                                                         { "Port"      , "666"           },
                                                          { "os"        , OS              } };
             return _serial;
         }

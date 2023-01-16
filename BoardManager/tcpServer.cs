@@ -15,6 +15,7 @@ namespace BoardManager
         Connected,
         Disconnected,
         Pending,
+        Allocating,
     }
     class TcpServer
     {
@@ -26,13 +27,25 @@ namespace BoardManager
         private string last = string.Empty;
 
         private static readonly ManualResetEvent tcpClientConnected = new(false);
-        public TcpServer(int port)
+        public TcpServer( int baseport )
         {
-            Connection = ConnectState.Disconnected;
-            this.Port = port;
-            server = new TcpListener(IPAddress.Any, port);
-            server.Start();
-            DoBeginAcceptTcpClient();
+            Connection = ConnectState.Allocating;
+            while (Connection == ConnectState.Allocating)
+            {
+                try
+                {
+                    this.Port = GetNextAvailablePort(baseport);
+                    server = new TcpListener(IPAddress.Any, Port);
+                    server.Start();
+                    DoBeginAcceptTcpClient();
+                    Connection = ConnectState.Disconnected;
+                }
+                catch
+                {
+                    baseport++;
+                }
+            }
+            Console.WriteLine($"Listening on port {Port}");
         }
 
         public static int  GetNextAvailablePort(int baseport )
@@ -46,7 +59,7 @@ namespace BoardManager
             {
                 isAvailable = true;
 
-                foreach (TcpConnectionInformation tcpi in tcpConnInfoArray)
+                 foreach (TcpConnectionInformation tcpi in tcpConnInfoArray)
                 {
                     if (tcpi.LocalEndPoint.Port == _port)
                     {
@@ -57,6 +70,7 @@ namespace BoardManager
 
                 if (isAvailable)
                 {
+                    Console.WriteLine($"Listening on port {_port}");
                     return _port;
                 }
             }
