@@ -54,5 +54,6 @@ namespace BoardManagerTest
             if (bd2 == bd) Assert.Fail("Boards should not be equal");
  
         }
+
     }
 }
