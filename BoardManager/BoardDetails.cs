@@ -83,7 +83,7 @@ namespace BoardManager
         /// <value>
         ///   <c>true</c> if board is internal otherwise, <c>false</c>.</value>
         public bool BoardInternal { get; set; } = false;
-        public string IPAddress { get; set; }
+        public string ConnectedAddress { get; internal set; }
         #endregion
 
         /// <summary>
@@ -92,7 +92,6 @@ namespace BoardManager
         public BoardDetails( bool start=true )
         {
             Name = "Unknown";
-            IPAddress = "127.0.0.1";
             tcpServer = new TcpServer(BASEPORT);
 
             if (start) Start();
@@ -107,7 +106,16 @@ namespace BoardManager
         public void Start()
         {
             _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
-  
+        }
+
+        public string GetPort()
+        {
+            return tcpServer.Port.ToString();
+        }
+
+        public string GetIPAddress()
+        {
+            return tcpServer.Address.MapToIPv4().ToString();
         }
 
         /// <summary>
@@ -133,8 +141,8 @@ namespace BoardManager
         public Dictionary<string, string> ToDictionary()
         {
             Dictionary<string, string> _serial = new() { { "name"      , Name            },
-                                                         { "ip_address", "IPAddress"     },
-                                                         { "Port"      , "666"           },
+                                                         { "ip_address", GetIPAddress()  },
+                                                         { "Port"      , GetPort()       },
                                                          { "os"        , OS              } };
             return _serial;
         }

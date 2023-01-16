@@ -32,7 +32,7 @@ namespace BoardManagerTest
         {          
             bd.Start();
             Assert.IsTrue(bd.TimeStarted);
-            Assert.AreNotEqual(bd.IPAddress, "Unknown");
+            Assert.AreNotEqual(bd.ConnectedAddress, "Unknown");
         }
 
         [TestMethod]
