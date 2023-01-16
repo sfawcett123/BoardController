@@ -56,7 +56,7 @@ namespace BoardManager
             {
                 Name = _board.Name,
                 BoardInternal = _ip_address == "127.0.0.1",
-                IPAddress = _ip_address,
+                ConnectedAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
                 OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => ""),

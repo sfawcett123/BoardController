@@ -21,6 +21,7 @@ namespace BoardManager
     {
         public int Port { get; }
         public ConnectState Connection { get; internal set; }
+        public IPAddress  Address { get; internal set; }
 
         private readonly TcpListener server ;
         private TcpClient? client;
@@ -30,12 +31,15 @@ namespace BoardManager
         public TcpServer( int baseport )
         {
             Connection = ConnectState.Allocating;
+            this.Address = IPAddress.Any;
+            this.Port = baseport;
+
             while (Connection == ConnectState.Allocating)
             {
                 try
                 {
                     this.Port = GetNextAvailablePort(baseport);
-                    server = new TcpListener(IPAddress.Any, Port);
+                    server = new TcpListener(this.Address, Port);
                     server.Start();
                     DoBeginAcceptTcpClient();
                     Connection = ConnectState.Disconnected;
