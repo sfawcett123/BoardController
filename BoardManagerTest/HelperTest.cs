@@ -7,7 +7,7 @@ namespace BoardManager.BoardManagerTests
     public class HelperTest
     {
         /// <exclude />
-        [TestMethod]
+        [TestMethod , TestCategory("TCP")]
         public void TestSerialize()
         {
             Dictionary<string, string> TestDictionary = new()
@@ -20,7 +20,7 @@ namespace BoardManager.BoardManagerTests
         }
 
         /// <exclude />
-        [TestMethod]
+        [TestMethod, TestCategory("TCP")]
         public void TestMergeEqual()
         {
             Dictionary<string, string> TestDictionaryOne = new()
@@ -39,7 +39,7 @@ namespace BoardManager.BoardManagerTests
         }
 
         /// <exclude />
-        [TestMethod]
+        [TestMethod, TestCategory("TCP")]
         public void TestMergeDiff()
         {
             Dictionary<string, string> TestDictionaryOne = new()
