@@ -180,7 +180,7 @@ namespace BoardManager
                     
                 }
                 catch {
-                    Console.WriteLine("Invalid Json");
+                    Console.WriteLine($"Invalid Json {json_data}");
                 }                
             }
 

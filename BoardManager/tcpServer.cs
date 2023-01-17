@@ -6,6 +6,7 @@ using System.Net.Sockets;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
 namespace BoardManager
@@ -152,9 +153,12 @@ namespace BoardManager
 
             try
             {
+                
                 NetworkStream stream = client.GetStream();
-                byte[] msg = System.Text.Encoding.ASCII.GetBytes(_str);
-                stream.Write(msg, 0, msg.Length);    
+                byte[] msg = Encoding.ASCII.GetBytes(_str);
+                stream.Write(msg, 0, msg.Length);
+                byte[] LINEFEED = Encoding.ASCII.GetBytes("\r");
+                stream.Write( LINEFEED, 0, LINEFEED.Length );
             }
             catch
             {
