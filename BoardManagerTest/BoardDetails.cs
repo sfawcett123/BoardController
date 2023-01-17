@@ -15,7 +15,6 @@ namespace BoardManagerTest
         {
             Name = "TEST",
             BoardInternal = true,
-            IPAddress = "127.0.0.1",
             Rate = 1,
             OS = OperatingSystems.ARDUINO.ToString(),
         };
@@ -24,27 +23,16 @@ namespace BoardManagerTest
         {
             Name = "TEST2",
             BoardInternal = true,
-            IPAddress = "127.0.0.1",
             Rate = 1,
             OS = OperatingSystems.ARDUINO.ToString(),
         };
-
-        [TestMethod]
-        public void TestToString()
-        {
-            Assert.IsNotNull(bd);
-
-            string result = bd.ToString();
-            
-            Assert.AreEqual(result,"Unknown" );
-        }
 
         [TestMethod]
         public void StartBoard()
         {          
             bd.Start();
             Assert.IsTrue(bd.TimeStarted);
-            Assert.AreNotEqual(bd.IPAddress, "Unknown");
+            Assert.AreNotEqual(bd.ConnectedAddress, "Unknown");
         }
 
         [TestMethod]
@@ -54,5 +42,6 @@ namespace BoardManagerTest
             if (bd2 == bd) Assert.Fail("Boards should not be equal");
  
         }
+
     }
 }

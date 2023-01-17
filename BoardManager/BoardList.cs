@@ -56,7 +56,7 @@ namespace BoardManager
             {
                 Name = _board.Name,
                 BoardInternal = _ip_address == "127.0.0.1",
-                IPAddress = _ip_address,
+                ConnectedAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
                 OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => ""),
@@ -121,6 +121,21 @@ namespace BoardManager
                 if (b.OutputData != null)
                 {
                     all_data = all_data.MergeLeft(b.OutputData);
+                }
+            }
+
+            return all_data;
+        }
+
+        public Dictionary<string, string> GetAllInputData()
+        {
+            Dictionary<string, string> all_data = new();
+
+            foreach (BoardDetails b in boards.Where(x => x is not null))
+            {
+                if (b.InputData != null)
+                {
+                    all_data = all_data.MergeLeft(b.InputData);
                 }
             }
 
