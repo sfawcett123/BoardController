@@ -4,7 +4,7 @@
 // Created          : 12-30-2022
 //
 // Last Modified By : steve
-// Last Modified On : 12-30-2022
+// Last Modified On : 01-17-2023
 // ***********************************************************************
 // <copyright file="BoardList.cs" company="BoardManager">
 //     Steven Fawcett
@@ -127,6 +127,10 @@ namespace BoardManager
             return all_data;
         }
 
+        /// <summary>
+        /// Gets all input data.
+        /// </summary>
+        /// <returns>Dictionary&lt;System.String, System.String&gt;.</returns>
         public Dictionary<string, string> GetAllInputData()
         {
             Dictionary<string, string> all_data = new();

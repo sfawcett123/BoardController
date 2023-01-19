@@ -1,4 +1,17 @@
-﻿using System;
+﻿// ***********************************************************************
+// Assembly         : BoardManager
+// Author           : steve
+// Created          : 01-16-2023
+//
+// Last Modified By : steve
+// Last Modified On : 01-17-2023
+// ***********************************************************************
+// <copyright file="tcpServer.cs" company="BoardManager">
+//     Steven Fawcett
+// </copyright>
+// <summary></summary>
+// ***********************************************************************
+using System;
 using System.Data;
 using System.Net;
 using System.Net.NetworkInformation;
@@ -11,24 +24,70 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace BoardManager
 {
+    /// <summary>
+    /// Enum ConnectState
+    /// </summary>
     internal enum ConnectState
     {
+        /// <summary>
+        /// The connected
+        /// </summary>
         Connected,
+        /// <summary>
+        /// The disconnected
+        /// </summary>
         Disconnected,
+        /// <summary>
+        /// The pending
+        /// </summary>
         Pending,
+        /// <summary>
+        /// The allocating
+        /// </summary>
         Allocating,
     }
+    /// <summary>
+    /// Class TcpServer.
+    /// </summary>
     class TcpServer
     {
+        /// <summary>
+        /// Gets the port.
+        /// </summary>
+        /// <value>The port.</value>
         public int Port { get; }
+        /// <summary>
+        /// Gets or sets the connection.
+        /// </summary>
+        /// <value>The connection.</value>
         public ConnectState Connection { get; internal set; }
+        /// <summary>
+        /// Gets or sets the address.
+        /// </summary>
+        /// <value>The address.</value>
         public IPAddress  Address { get; internal set; }
 
+        /// <summary>
+        /// The server
+        /// </summary>
         private readonly TcpListener server ;
+        /// <summary>
+        /// The client
+        /// </summary>
         private TcpClient? client;
+        /// <summary>
+        /// The last
+        /// </summary>
         private string last = string.Empty;
 
+        /// <summary>
+        /// The TCP client connected
+        /// </summary>
         private static readonly ManualResetEvent tcpClientConnected = new(false);
+        /// <summary>
+        /// Initializes a new instance of the <see cref="TcpServer"/> class.
+        /// </summary>
+        /// <param name="baseport">The baseport.</param>
         public TcpServer( int baseport )
         {
             Connection = ConnectState.Allocating;
@@ -52,6 +111,11 @@ namespace BoardManager
             }
         }
 
+        /// <summary>
+        /// Gets the next available port.
+        /// </summary>
+        /// <param name="baseport">The baseport.</param>
+        /// <returns>System.Int32.</returns>
         public static int  GetNextAvailablePort(int baseport )
         {
             IPGlobalProperties iPGlobalProperties = IPGlobalProperties.GetIPGlobalProperties();
@@ -81,6 +145,10 @@ namespace BoardManager
             return -1;
         }
 
+        /// <summary>
+        /// Writes the data.
+        /// </summary>
+        /// <param name="msg">The MSG.</param>
         public void WriteData( string msg )
         {
             // If we loose connection lets restart listener to see if it comes back
@@ -102,6 +170,10 @@ namespace BoardManager
             }
         }
 
+        /// <summary>
+        /// Reads the data.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string ReadData()
         {
             // If we loose connection lets restart listener to see if it comes back
@@ -115,6 +187,9 @@ namespace BoardManager
 
             return ReadLine();
         }
+        /// <summary>
+        /// Does the begin accept TCP client.
+        /// </summary>
         private void DoBeginAcceptTcpClient()
         {
             // If we are connected or pending then we don't need to proceed.
@@ -129,6 +204,10 @@ namespace BoardManager
             tcpClientConnected.WaitOne();
         }
 
+        /// <summary>
+        /// Does the accept TCP client callback.
+        /// </summary>
+        /// <param name="ar">The ar.</param>
         private void DoAcceptTcpClientCallback(IAsyncResult ar)
         {
             if( ar == null) { return; }
@@ -145,6 +224,10 @@ namespace BoardManager
             tcpClientConnected.Set();
         }
 
+        /// <summary>
+        /// Writes the line.
+        /// </summary>
+        /// <param name="_str">The string.</param>
         private void WriteLine( string _str)
         {
             if (client == null) return;
@@ -166,6 +249,10 @@ namespace BoardManager
             }
         }
 
+        /// <summary>
+        /// Reads the line.
+        /// </summary>
+        /// <returns>System.String.</returns>
         private string ReadLine()
         {
             if (client == null) return "";

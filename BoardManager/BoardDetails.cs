@@ -4,7 +4,7 @@
 // Created          : 12-30-2022
 //
 // Last Modified By : steve
-// Last Modified On : 12-30-2022
+// Last Modified On : 01-17-2023
 // ***********************************************************************
 // <copyright file="BoardDetails.cs" company="BoardManager">
 //     Steven Fawcett
@@ -31,6 +31,9 @@ namespace BoardManager
         /// Timeout Period
         /// </summary>
         public const int TIMEOUT = 100;
+        /// <summary>
+        /// The baseport
+        /// </summary>
         public const int BASEPORT = 9000;
         #endregion
 
@@ -67,6 +70,10 @@ namespace BoardManager
         /// <value>The timeout.</value>
         public int Timeout { get; set; }
 
+        /// <summary>
+        /// Gets a value indicating whether [time started].
+        /// </summary>
+        /// <value><c>true</c> if [time started]; otherwise, <c>false</c>.</value>
         public bool TimeStarted {  get { return _timer != null; } }
 
         /// <summary>
@@ -74,21 +81,33 @@ namespace BoardManager
         /// </summary>
         /// <value>The output data.</value>
         public Dictionary<string, string>? OutputData { get; internal set; }
+        /// <summary>
+        /// Gets the input data.
+        /// </summary>
+        /// <value>The input data.</value>
         public Dictionary<string, string>? InputData { get; internal set; }
 
-        /// <summary>Sample Rate </summary>
+        /// <summary>
+        /// Sample Rate
+        /// </summary>
         /// <value>Sample rate in seconds</value>
         public int Pulse { get; private set; } = 10;
-        /// <summary>Indicates if board is Internal.</summary>
-        /// <value>
-        ///   <c>true</c> if board is internal otherwise, <c>false</c>.</value>
+        /// <summary>
+        /// Indicates if board is Internal.
+        /// </summary>
+        /// <value><c>true</c> if board is internal otherwise, <c>false</c>.</value>
         public bool BoardInternal { get; set; } = false;
+        /// <summary>
+        /// Gets the connected address.
+        /// </summary>
+        /// <value>The connected address.</value>
         public string ConnectedAddress { get; internal set; }
         #endregion
 
         /// <summary>
         /// Constructor
         /// </summary>
+        /// <param name="start">if set to <c>true</c> [start].</param>
         public BoardDetails( bool start=true )
         {
             Name = "Unknown";
@@ -108,11 +127,19 @@ namespace BoardManager
             _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
         }
 
+        /// <summary>
+        /// Gets the port.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string GetPort()
         {
             return tcpServer.Port.ToString();
         }
 
+        /// <summary>
+        /// Gets the ip address.
+        /// </summary>
+        /// <returns>System.String.</returns>
         public string GetIPAddress()
         {
             return tcpServer.Address.MapToIPv4().ToString();
@@ -130,13 +157,6 @@ namespace BoardManager
         /// Calculate HASH
         /// </summary>
         /// <returns>A hash code for this instance, suitable for use in hashing algorithms and data structures like a hash table.</returns>
-        /// 
-        /// <summary>
-        /// Comparison operator
-        /// </summary>
-        /// <param name="left">The left.</param>
-        /// <param name="right">The right.</param>
-        /// <returns>The result of the operator.</returns>
 
         public Dictionary<string, string> ToDictionary()
         {

@@ -30,7 +30,9 @@ namespace BoardManager
             return JsonSerializer.Serialize(input);
         }
 
-        /// <summary>Merges from the left.</summary>
+        /// <summary>
+        /// Merges from the left.
+        /// </summary>
         /// <typeparam name="T">Type</typeparam>
         /// <typeparam name="K">Key</typeparam>
         /// <typeparam name="V">Value</typeparam>
