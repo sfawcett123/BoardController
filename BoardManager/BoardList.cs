@@ -25,6 +25,8 @@ namespace BoardManager
     /// </summary>
     public abstract class BoardList
     {
+        public const int TIMEOUT = 10;
+
         /// <summary>
         /// The boards
         /// </summary>
@@ -74,7 +76,7 @@ namespace BoardManager
         /// Remove Timed out boards
         /// </summary>
         /// <param name="timeout">The timeout.</param>
-        public void RemoveTimedOut( int timeout = BoardDetails.TIMEOUT )
+        public void RemoveTimedOut( int timeout = TIMEOUT )
         {
             foreach (BoardDetails b in boards.Where(s => s.Timeout > timeout).ToArray<BoardDetails>())
             {
