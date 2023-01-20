@@ -25,7 +25,10 @@ namespace BoardManager
     /// </summary>
     public abstract class BoardList
     {
+
         public const int TIMEOUT = 100;
+
+
         /// <summary>
         /// The boards
         /// </summary>
