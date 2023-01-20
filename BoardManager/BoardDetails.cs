@@ -28,10 +28,6 @@ namespace BoardManager
     {
         #region constants
         /// <summary>
-        /// Timeout Period
-        /// </summary>
-        public const int TIMEOUT = 100;
-        /// <summary>
         /// The baseport
         /// </summary>
         public const int BASEPORT = 9000;
@@ -71,12 +67,6 @@ namespace BoardManager
         public int Timeout { get; set; }
 
         /// <summary>
-        /// Gets a value indicating whether [time started].
-        /// </summary>
-        /// <value><c>true</c> if [time started]; otherwise, <c>false</c>.</value>
-        public bool TimeStarted {  get { return _timer != null; } }
-
-        /// <summary>
         /// List of data from Flight Simulator the board requires.
         /// </summary>
         /// <value>The output data.</value>
@@ -112,6 +102,7 @@ namespace BoardManager
         {
             Name = "Unknown";
             tcpServer = new TcpServer(BASEPORT);
+            ConnectedAddress = "Unknown";
 
             if (start) Start();
 
@@ -125,6 +116,7 @@ namespace BoardManager
         public void Start()
         {
             _timer = new Timer(ProcessBoard, null, TimeSpan.Zero, TimeSpan.FromSeconds(Rate));
+            this.Timeout = 0;
         }
 
         /// <summary>
@@ -176,7 +168,10 @@ namespace BoardManager
         /// <param name="state">The state.</param>
         private void ProcessBoard(object? state)
         {
-            if ( OutputData != null ) tcpServer.WriteData( OutputData.Serialize() );
+            if (OutputData != null)
+            {
+                tcpServer.WriteData(OutputData.Serialize());
+            }
 
             string json_data = tcpServer.ReadData();
 
@@ -202,6 +197,15 @@ namespace BoardManager
                 catch {
                     Console.WriteLine($"Invalid Json {json_data}");
                 }                
+            }
+
+            // If connected reset timeout, otherwise decrease counter.
+            if( tcpServer.Connection == ConnectState.Connected ) {
+                this.Timeout = 0;
+            }
+            else
+            {              
+                 this.Timeout++;
             }
 
         }

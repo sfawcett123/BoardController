@@ -31,8 +31,7 @@ namespace BoardManagerTest
         public void StartBoard()
         {          
             bd.Start();
-            Assert.IsTrue(bd.TimeStarted);
-            Assert.AreNotEqual(bd.ConnectedAddress, "Unknown");
+            Assert.AreEqual("Unknown", bd.ConnectedAddress);
         }
 
         [TestMethod]
@@ -41,6 +40,15 @@ namespace BoardManagerTest
             Assert.AreNotEqual(bd, bd2);
             if (bd2 == bd) Assert.Fail("Boards should not be equal");
  
+        }
+
+        [TestMethod]
+        public void TestTimeOut()
+        {
+            bd.Start();
+            Assert.AreEqual(0 , bd.Timeout );
+            Thread.Sleep(3000);
+            Assert.AreNotEqual(0, bd.Timeout);
         }
 
     }
