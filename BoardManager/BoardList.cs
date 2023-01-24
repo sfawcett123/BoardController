@@ -120,11 +120,11 @@ namespace BoardManager
         {
             Dictionary<string, string> all_data = new();
 
-            foreach (BoardDetails b in boards.Where(x => x is not null ))
+            foreach (BoardDetails b in boards.Where(x => x is not null))
             {
-                if (b.OutputData != null)
+                foreach (KeyValuePair<string, string> data in b.OutputData)
                 {
-                    all_data = all_data.MergeLeft(b.OutputData);
+                    all_data.AddUpdate(data);
                 }
             }
 
@@ -141,9 +141,9 @@ namespace BoardManager
 
             foreach (BoardDetails b in boards.Where(x => x is not null))
             {
-                if (b.InputData != null)
+                foreach( KeyValuePair<string,string>  data in b.InputData)
                 {
-                    all_data = all_data.MergeLeft(b.InputData);
+                    all_data.AddUpdate(data);
                 }
             }
 

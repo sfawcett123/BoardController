@@ -18,6 +18,7 @@ using System.Runtime.InteropServices;
 using System.Security.Cryptography.X509Certificates;
 using System.Text.Json.Nodes;
 using System.Text.Json;
+using System.Collections.ObjectModel;
 
 namespace BoardManager
 {
@@ -75,8 +76,8 @@ namespace BoardManager
         /// Gets the input data.
         /// </summary>
         /// <value>The input data.</value>
-        public Dictionary<string, string>? InputData { get; internal set; }
-
+        public ObservableCollection<KeyValuePair<string, string>> InputData { get; internal set; }
+        
         /// <summary>
         /// Sample Rate
         /// </summary>
@@ -103,12 +104,15 @@ namespace BoardManager
             Name = "Unknown";
             tcpServer = new TcpServer(BASEPORT);
             ConnectedAddress = "Unknown";
+            InputData = new();
+            InputData.CollectionChanged += InputData_CollectionChanged;
 
             if (start) Start();
 
         }
 
         #region public methods
+
 
         /// <summary>
         /// Starts a background process which will read/write data from/to the boards assigned Port.
@@ -180,17 +184,9 @@ namespace BoardManager
                 try
                 {
                     var newdata = JsonSerializer.Deserialize<Dictionary<string, string>>(json_data);
-                    if (newdata != null)
+                    foreach( var data in newdata )
                     {
-
-                        if (InputData != null)
-                        {
-                            InputData = InputData.MergeLeft(newdata);
-                        }
-                        else
-                        {
-                            InputData = newdata;
-                        }
+                        InputData.AddUpdate(data);
                     }
                     
                 }
@@ -210,6 +206,11 @@ namespace BoardManager
 
         }
 
+        private void InputData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
+        {
+            Console.WriteLine("Input Data Changed");
+
+        }
         #endregion
     }
 }

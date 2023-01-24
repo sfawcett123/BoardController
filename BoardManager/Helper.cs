@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System.Collections.ObjectModel;
 using System.Text.Json;
 
 namespace BoardManager
@@ -30,6 +31,33 @@ namespace BoardManager
             return JsonSerializer.Serialize(input);
         }
 
+        public static void AddUpdate( this ObservableCollection<KeyValuePair<string, string>> Input, KeyValuePair<string, string> data)
+        {
+            bool found = false;
+            for (int i = 0; i < Input.Count; i++)
+            {
+                if (Input[i].Key == data.Key)
+                {
+                    Input[i] = data;
+                    found = true;
+                    break;
+                }
+            }
+
+            if (!found)
+            {
+                Input.Add(data);
+            }
+        }
+
+        public static void AddUpdate(this Dictionary<string, string> input , KeyValuePair<string,string> data )
+        {
+            if( input.TryAdd( data.Key, data.Value ) == false ) 
+            {
+                input[data.Key] = data.Value;   
+            }
+        }
+
         /// <summary>
         /// Merges from the left.
         /// </summary>
@@ -39,18 +67,7 @@ namespace BoardManager
         /// <param name="me">The master Dictionary</param>
         /// <param name="others">List of Dictionaries to Merge</param>
         /// <returns>T.</returns>
-        public static T MergeLeft<T, K, V>(this T me, params IDictionary<K, V>[] others) where T : IDictionary<K, V>, new()
-        {
-            T newMap = new();
-            foreach (IDictionary<K, V> src in new List<IDictionary<K, V>> { me }.Concat(others))
-            {
-                foreach (KeyValuePair<K, V> p in src)
-                {
-                    newMap[p.Key] = p.Value;
-                }
-            }
-            return newMap;
-        }
+
 
     }
 }
