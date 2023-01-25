@@ -11,11 +11,11 @@ namespace BoardManager
 {
     public class NotifyPropertyChangedImpl : INotifyPropertyChanged
     {
-        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = null) =>
+        protected void NotifyPropertyChanged([CallerMemberName] string propertyName = "" ) =>
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
         // interface implemetation
-        public event PropertyChangedEventHandler PropertyChanged;
+        public event PropertyChangedEventHandler? PropertyChanged;
     }
 
     public class IOData : NotifyPropertyChangedImpl
@@ -98,8 +98,10 @@ namespace BoardManager
             AddUpdate(kvp);
         }
 
-        public IOList(List<string> list)
+        public IOList(List<string>? list)
         {
+            if (list == null) return;
+
             foreach( string s in list )
             {
                 AddUpdate(new(s, ""));

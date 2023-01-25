@@ -31,7 +31,6 @@ namespace BoardManager
             return JsonSerializer.Serialize(input);
         }
 
-
         public static void AddUpdate(this Dictionary<string, string> input , KeyValuePair<string,string> data )
         {
             if( input.TryAdd( data.Key, data.Value ) == false ) 
@@ -39,17 +38,5 @@ namespace BoardManager
                 input[data.Key] = data.Value;   
             }
         }
-
-        /// <summary>
-        /// Merges from the left.
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <typeparam name="K">Key</typeparam>
-        /// <typeparam name="V">Value</typeparam>
-        /// <param name="me">The master Dictionary</param>
-        /// <param name="others">List of Dictionaries to Merge</param>
-        /// <returns>T.</returns>
-
-
     }
 }

@@ -32,8 +32,8 @@ Console.WriteLine("Connection");
 for ( int i = 0; i < 10000 ; i++)
 {
     // Set the output data
-    // Dictionary<string, string> tempdata = new() { { DATASET, $"{i}" } };
-    Dictionary<string, string> tempdata = new() { { DATASET, "1" } };
+    Dictionary<string, string> tempdata = new() { { DATASET, $"{i}" } };
+    //Dictionary<string, string> tempdata = new() { { DATASET, "1" } };
 
     bd.SetOutputData(tempdata);
 

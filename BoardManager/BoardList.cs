@@ -55,7 +55,8 @@ namespace BoardManager
 
             if (_request is not null && _request.RemoteIpAddress is not null)
                      _ip_address = _request.RemoteIpAddress.ToString();
-
+               
+                
             BoardDetails _bd = new()
             {
                 Name = _board.Name,
@@ -63,7 +64,7 @@ namespace BoardManager
                 ConnectedAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
-                OutputData = new(_board.Outputs)
+                OutputData = new(_board.Outputs) 
             };
             
             if (!boards.Contains<BoardDetails>(_bd))
@@ -122,11 +123,9 @@ namespace BoardManager
 
             foreach (BoardDetails b in boards.Where(x => x is not null))
             {
-                System.Collections.IList list = b.OutputData;
-                for (int i = 0; i < list.Count; i++)
+                foreach( IOData i in b.OutputData)
                 {
-                    KeyValuePair<string, string> data = (KeyValuePair<string, string>)list[i];
-                    all_data.AddUpdate(data);
+                    all_data.AddUpdate( new(i.Key, i.Value) );
                 }
             }
 

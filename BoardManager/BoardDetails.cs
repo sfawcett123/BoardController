@@ -171,9 +171,12 @@ namespace BoardManager
                 try
                 {
                     var newdata = JsonSerializer.Deserialize<Dictionary<string, string>>(json_data);
-                    foreach( var data in newdata )
+                    if (newdata != null)
                     {
-                        InputData.AddUpdate(data);
+                        foreach (var data in newdata)
+                        {
+                            InputData.AddUpdate(data);
+                        }
                     }
                 }
                 catch {
