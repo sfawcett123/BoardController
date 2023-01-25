@@ -44,7 +44,7 @@ namespace BoardManager
         public string Name { get; set; }
 
         public IOList InputData { get; internal set; }
-
+        public IOList OutputData { get; internal set; }
         /// <summary>
         /// Sample Rate
         /// </summary>
@@ -61,13 +61,7 @@ namespace BoardManager
         /// </summary>
         /// <value>The timeout.</value>
         public int Timeout { get; set; }
-
-        /// <summary>
-        /// List of data from Flight Simulator the board requires.
-        /// </summary>
-        /// <value>The output data.</value>
-        public Dictionary<string, string>? OutputData { get; internal set; }
-        
+          
         /// <summary>
         /// Sample Rate
         /// </summary>
@@ -99,6 +93,7 @@ namespace BoardManager
             _tcpServer = new TcpServer(BASEPORT);
             ConnectedAddress = "Unknown";
             InputData = new();
+            OutputData = new();
 
             if (start) Start();
 

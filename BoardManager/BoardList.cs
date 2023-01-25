@@ -63,7 +63,7 @@ namespace BoardManager
                 ConnectedAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
-                OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => ""),
+                OutputData = new(_board.Outputs)
             };
             
             if (!boards.Contains<BoardDetails>(_bd))
@@ -108,7 +108,7 @@ namespace BoardManager
         {
             foreach (BoardDetails b in boards)
             {
-                b.OutputData = fs_data;
+                b.OutputData = new( fs_data );
             }
         }
 
@@ -122,8 +122,10 @@ namespace BoardManager
 
             foreach (BoardDetails b in boards.Where(x => x is not null))
             {
-                foreach (KeyValuePair<string, string> data in b.OutputData)
+                System.Collections.IList list = b.OutputData;
+                for (int i = 0; i < list.Count; i++)
                 {
+                    KeyValuePair<string, string> data = (KeyValuePair<string, string>)list[i];
                     all_data.AddUpdate(data);
                 }
             }

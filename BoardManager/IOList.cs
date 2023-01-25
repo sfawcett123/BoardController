@@ -84,6 +84,41 @@ namespace BoardManager
         {
 
         }
+
+        public IOList(Dictionary<string,string> dict )
+        {
+            foreach( KeyValuePair<string,string> kvp in dict )
+            {
+                AddUpdate(kvp);
+            }
+        }
+
+        public IOList(KeyValuePair<string, string> kvp)
+        {
+            AddUpdate(kvp);
+        }
+
+        public IOList(List<string> list)
+        {
+            foreach( string s in list )
+            {
+                AddUpdate(new(s, ""));
+            }
+        }
+
+        public string Serialize()
+        {
+            Dictionary<string, string> temp = new();
+
+            foreach( IOData iodata in this )
+            {
+                temp.TryAdd(iodata.Key, iodata.Value);    
+            }
+
+            return temp.Serialize();
+
+        }
+        
         public void AddUpdate( KeyValuePair<string, string> data)
         {
             bool found = false;
@@ -126,6 +161,5 @@ namespace BoardManager
             IOData n= new( data );
             this.Add(n);
         }
-
     }
 }
