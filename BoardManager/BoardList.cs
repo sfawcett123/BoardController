@@ -55,7 +55,8 @@ namespace BoardManager
 
             if (_request is not null && _request.RemoteIpAddress is not null)
                      _ip_address = _request.RemoteIpAddress.ToString();
-
+               
+                
             BoardDetails _bd = new()
             {
                 Name = _board.Name,
@@ -63,7 +64,7 @@ namespace BoardManager
                 ConnectedAddress = _ip_address,
                 Rate = 1,
                 OS = _board.OperatingSystem,
-                OutputData = _board.Outputs?.ToDictionary(keySelector: m => m, elementSelector: m => ""),
+                OutputData = new(_board.Outputs) 
             };
             
             if (!boards.Contains<BoardDetails>(_bd))
@@ -108,7 +109,7 @@ namespace BoardManager
         {
             foreach (BoardDetails b in boards)
             {
-                b.OutputData = fs_data;
+                b.OutputData = new( fs_data );
             }
         }
 
@@ -120,11 +121,11 @@ namespace BoardManager
         {
             Dictionary<string, string> all_data = new();
 
-            foreach (BoardDetails b in boards.Where(x => x is not null ))
+            foreach (BoardDetails b in boards.Where(x => x is not null))
             {
-                if (b.OutputData != null)
+                foreach( IOData i in b.OutputData)
                 {
-                    all_data = all_data.MergeLeft(b.OutputData);
+                    all_data.AddUpdate( new(i.Key, i.Value) );
                 }
             }
 
@@ -141,9 +142,24 @@ namespace BoardManager
 
             foreach (BoardDetails b in boards.Where(x => x is not null))
             {
-                if (b.InputData != null)
+                foreach( KeyValuePair<string,string>  data in b.InputData.ToKeyValuePair() )
                 {
-                    all_data = all_data.MergeLeft(b.InputData);
+                    all_data.AddUpdate(data);
+                }
+            }
+
+            return all_data;
+        }
+
+        public Dictionary<string, string> GetChangedInputData()
+        {
+            Dictionary<string, string> all_data = new();
+
+            foreach (BoardDetails b in boards.Where(x => x is not null))
+            {
+                foreach (KeyValuePair<string, string> data in b.InputData.ChangedData())
+                {
+                    all_data.AddUpdate(data);
                 }
             }
 

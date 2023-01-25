@@ -11,6 +11,7 @@
 // </copyright>
 // <summary></summary>
 // ***********************************************************************
+using System.Collections.ObjectModel;
 using System.Text.Json;
 
 namespace BoardManager
@@ -30,27 +31,12 @@ namespace BoardManager
             return JsonSerializer.Serialize(input);
         }
 
-        /// <summary>
-        /// Merges from the left.
-        /// </summary>
-        /// <typeparam name="T">Type</typeparam>
-        /// <typeparam name="K">Key</typeparam>
-        /// <typeparam name="V">Value</typeparam>
-        /// <param name="me">The master Dictionary</param>
-        /// <param name="others">List of Dictionaries to Merge</param>
-        /// <returns>T.</returns>
-        public static T MergeLeft<T, K, V>(this T me, params IDictionary<K, V>[] others) where T : IDictionary<K, V>, new()
+        public static void AddUpdate(this Dictionary<string, string> input , KeyValuePair<string,string> data )
         {
-            T newMap = new();
-            foreach (IDictionary<K, V> src in new List<IDictionary<K, V>> { me }.Concat(others))
+            if( input.TryAdd( data.Key, data.Value ) == false ) 
             {
-                foreach (KeyValuePair<K, V> p in src)
-                {
-                    newMap[p.Key] = p.Value;
-                }
+                input[data.Key] = data.Value;   
             }
-            return newMap;
         }
-
     }
 }
