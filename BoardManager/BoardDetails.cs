@@ -28,20 +28,11 @@ namespace BoardManager
     public sealed class BoardDetails : IDisposable
     {
         #region constants
-        /// <summary>
-        /// The baseport
-        /// </summary>
         public const int BASEPORT = 9000;
         #endregion
 
         #region private variables     
-        /// <summary>
-        /// The TCP listener
-        /// </summary>
-        private readonly TcpServer tcpServer;
-        /// <summary>
-        /// The timer
-        /// </summary>
+        private readonly TcpServer _tcpServer;
         private Timer? _timer;
         #endregion
 
@@ -51,6 +42,9 @@ namespace BoardManager
         /// </summary>
         /// <value>The name.</value>
         public string Name { get; set; }
+
+        public IOList InputData { get; internal set; }
+
         /// <summary>
         /// Sample Rate
         /// </summary>
@@ -61,6 +55,7 @@ namespace BoardManager
         /// </summary>
         /// <value>The os.</value>
         public string OS { get; set; } = "UNKNOWN";
+
         /// <summary>
         /// Should this be public?
         /// </summary>
@@ -72,29 +67,28 @@ namespace BoardManager
         /// </summary>
         /// <value>The output data.</value>
         public Dictionary<string, string>? OutputData { get; internal set; }
-        /// <summary>
-        /// Gets the input data.
-        /// </summary>
-        /// <value>The input data.</value>
-        public ObservableCollection<KeyValuePair<string, string>> InputData { get; internal set; }
         
         /// <summary>
         /// Sample Rate
         /// </summary>
         /// <value>Sample rate in seconds</value>
         public int Pulse { get; private set; } = 10;
+
         /// <summary>
         /// Indicates if board is Internal.
         /// </summary>
         /// <value><c>true</c> if board is internal otherwise, <c>false</c>.</value>
         public bool BoardInternal { get; set; } = false;
+
         /// <summary>
         /// Gets the connected address.
         /// </summary>
         /// <value>The connected address.</value>
         public string ConnectedAddress { get; internal set; }
+
         #endregion
 
+        #region Constructor
         /// <summary>
         /// Constructor
         /// </summary>
@@ -102,18 +96,16 @@ namespace BoardManager
         public BoardDetails( bool start=true )
         {
             Name = "Unknown";
-            tcpServer = new TcpServer(BASEPORT);
+            _tcpServer = new TcpServer(BASEPORT);
             ConnectedAddress = "Unknown";
             InputData = new();
-            InputData.CollectionChanged += InputData_CollectionChanged;
 
             if (start) Start();
 
         }
+        #endregion Constructor
 
         #region public methods
-
-
         /// <summary>
         /// Starts a background process which will read/write data from/to the boards assigned Port.
         /// </summary>
@@ -129,7 +121,7 @@ namespace BoardManager
         /// <returns>System.String.</returns>
         public string GetPort()
         {
-            return tcpServer.Port.ToString();
+            return _tcpServer.Port.ToString();
         }
 
         /// <summary>
@@ -138,7 +130,7 @@ namespace BoardManager
         /// <returns>System.String.</returns>
         public string GetIPAddress()
         {
-            return tcpServer.Address.MapToIPv4().ToString();
+            return _tcpServer.Address.MapToIPv4().ToString();
         }
 
         /// <summary>
@@ -174,10 +166,10 @@ namespace BoardManager
         {
             if (OutputData != null)
             {
-                tcpServer.WriteData(OutputData.Serialize());
+                _tcpServer.WriteData(OutputData.Serialize());
             }
 
-            string json_data = tcpServer.ReadData();
+            string json_data = _tcpServer.ReadData();
 
             if (json_data.Length > 0 )
             {
@@ -188,7 +180,6 @@ namespace BoardManager
                     {
                         InputData.AddUpdate(data);
                     }
-                    
                 }
                 catch {
                     Console.WriteLine($"Invalid Json {json_data}");
@@ -196,7 +187,7 @@ namespace BoardManager
             }
 
             // If connected reset timeout, otherwise decrease counter.
-            if( tcpServer.Connection == ConnectState.Connected ) {
+            if( _tcpServer.Connection == ConnectState.Connected ) {
                 this.Timeout = 0;
             }
             else
@@ -206,11 +197,6 @@ namespace BoardManager
 
         }
 
-        private void InputData_CollectionChanged(object sender, System.Collections.Specialized.NotifyCollectionChangedEventArgs e)
-        {
-            Console.WriteLine("Input Data Changed");
-
-        }
         #endregion
     }
 }

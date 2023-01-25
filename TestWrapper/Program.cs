@@ -36,7 +36,7 @@ for ( int i = 0; i < 10000 ; i++)
     bd.SetOutputData(tempdata);
 
     // Get the input data
-    foreach( var b in bd.GetAllInputData() )
+    foreach( var b in bd.GetChangedInputData() )
     {
         Console.WriteLine( b.Key+ ": " + b.Value ); 
     }

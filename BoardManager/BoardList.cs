@@ -141,7 +141,22 @@ namespace BoardManager
 
             foreach (BoardDetails b in boards.Where(x => x is not null))
             {
-                foreach( KeyValuePair<string,string>  data in b.InputData)
+                foreach( KeyValuePair<string,string>  data in b.InputData.ToKeyValuePair() )
+                {
+                    all_data.AddUpdate(data);
+                }
+            }
+
+            return all_data;
+        }
+
+        public Dictionary<string, string> GetChangedInputData()
+        {
+            Dictionary<string, string> all_data = new();
+
+            foreach (BoardDetails b in boards.Where(x => x is not null))
+            {
+                foreach (KeyValuePair<string, string> data in b.InputData.ChangedData())
                 {
                     all_data.AddUpdate(data);
                 }

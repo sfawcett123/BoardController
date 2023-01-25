@@ -31,24 +31,6 @@ namespace BoardManager
             return JsonSerializer.Serialize(input);
         }
 
-        public static void AddUpdate( this ObservableCollection<KeyValuePair<string, string>> Input, KeyValuePair<string, string> data)
-        {
-            bool found = false;
-            for (int i = 0; i < Input.Count; i++)
-            {
-                if (Input[i].Key == data.Key)
-                {
-                    Input[i] = data;
-                    found = true;
-                    break;
-                }
-            }
-
-            if (!found)
-            {
-                Input.Add(data);
-            }
-        }
 
         public static void AddUpdate(this Dictionary<string, string> input , KeyValuePair<string,string> data )
         {
