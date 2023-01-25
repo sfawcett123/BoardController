@@ -70,7 +70,7 @@ namespace BoardManager
         /// <summary>
         /// The server
         /// </summary>
-        private readonly TcpListener server ;
+        private readonly TcpListener? server ;
         /// <summary>
         /// The client
         /// </summary>
@@ -99,8 +99,8 @@ namespace BoardManager
                 try
                 {
                     this.Port = GetNextAvailablePort(baseport);
-                    server = new TcpListener(this.Address, Port);
-                    server.Start();
+                    this.server = new TcpListener(this.Address, Port);
+                    this.server.Start();
                     DoBeginAcceptTcpClient();
                     Connection = ConnectState.Disconnected;
                 }
